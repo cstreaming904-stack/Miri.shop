@@ -6,7 +6,7 @@
 
 <script>
 if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("service-worker.js");
+  navigator.serviceWorker.register("service-worker.js");
 }
 </script>
 
@@ -66,7 +66,11 @@ letter-spacing:.5px;
 margin-top:6px;
 font-size:14px;
 font-weight:700;
+}
+
+.phone a{
 color:#ec4899;
+text-decoration:none;
 }
 
 .subtitle{
@@ -136,13 +140,6 @@ right:14px;
 top:50%;
 transform:translateY(-50%);
 font-size:18px;
-}
-
-.date-note{
-font-size:12px;
-color:#9ca3af;
-margin-top:6px;
-padding-left:4px;
 }
 
 .btn{
@@ -285,7 +282,9 @@ margin-bottom:14px;
 
 <h1>MIRI SHOP</h1>
 
-<div class="phone">📞 +52 981 196 8561</div>
+<div class="phone">
+<a href="https://wa.me/529811968561">📱 +52 981 196 8561</a>
+</div>
 
 <div class="subtitle">Calculadora de reembolsos</div>
 
@@ -317,8 +316,6 @@ margin-bottom:14px;
 <input id="fechaEntrega" type="date">
 <span class="icono">📅</span>
 </div>
-
-<div class="date-note">Selecciona la fecha en que entregaste el servicio.</div>
 
 </div>
 
@@ -430,7 +427,7 @@ setTimeout(()=>toast.classList.remove("show"),1500)
 
 window.addEventListener("load",function(){
 setTimeout(()=>{
-splash=document.getElementById("splash-screen")
+let splash=document.getElementById("splash-screen")
 splash.style.opacity="0"
 splash.style.transition="opacity .5s"
 setTimeout(()=>splash.style.display="none",500)
@@ -440,4 +437,4 @@ setTimeout(()=>splash.style.display="none",500)
 </script>
 
 </body>
-  </html>
+</html>
