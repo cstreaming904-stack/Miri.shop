@@ -14,30 +14,46 @@
   <title>Miri Shop - Calculadora de Reembolsos</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: radial-gradient(circle at top, #ffe4f1, #ffd6ec 35%, #f8efff 100%);
+      background:
+        radial-gradient(circle at top, #ffe3f1 0%, #ffd6ec 35%, #f7ecff 70%, #fff7fb 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 22px;
+      color: #4b5563;
     }
 
     .card {
       width: 100%;
-      max-width: 430px;
-      background: rgba(255,255,255,0.95);
-      border: 4px solid #f9c2dd;
-      border-radius: 32px;
-      box-shadow: 0 18px 40px rgba(200,100,160,0.18);
+      max-width: 440px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 4px solid #f7c5df;
+      border-radius: 34px;
+      box-shadow: 0 18px 45px rgba(223, 105, 170, 0.18);
       padding: 24px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .center { text-align: center; }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+      pointer-events: none;
+    }
+
+    .center {
+      text-align: center;
+    }
 
     .emoji {
       font-size: 42px;
@@ -48,83 +64,130 @@
       margin: 0;
       color: #ec4899;
       font-size: 30px;
-      font-weight: 800;
+      font-weight: 900;
+      letter-spacing: 0.5px;
     }
 
     .subtitle {
       margin-top: 8px;
       color: #d946ef;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 16px;
     }
 
     .title2 {
-      margin-top: 16px;
+      margin-top: 18px;
       color: #374151;
       font-size: 28px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .field {
-      margin-top: 14px;
+      margin-top: 15px;
     }
 
     label {
       display: block;
       color: #ec4899;
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 9px;
     }
 
     input {
       width: 100%;
-      border: 2px solid #f9c2dd;
-      background: #fff1f7;
-      border-radius: 18px;
-      padding: 14px 16px;
+      border: 3px solid #f7c5df;
+      background: #fff2f8;
+      border-radius: 20px;
+      padding: 15px 16px;
       font-size: 18px;
       outline: none;
+      color: #374151;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
     }
 
     input:focus {
       border-color: #ec4899;
-      box-shadow: 0 0 4px rgba(236,72,153,0.2);
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.10);
     }
 
-    button {
+    input[type="date"] {
+      appearance: none;
+      -webkit-appearance: none;
+      min-height: 56px;
+    }
+
+    .date-note {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 6px;
+      padding-left: 4px;
+    }
+
+    .btn {
       width: 100%;
       margin-top: 18px;
       border: 0;
-      border-radius: 18px;
-      padding: 15px;
-      font-size: 20px;
-      font-weight: 800;
+      border-radius: 22px;
+      padding: 16px;
+      font-size: 21px;
+      font-weight: 900;
       color: white;
       cursor: pointer;
-      background: linear-gradient(90deg,#fb7185,#ec4899);
-      box-shadow: 0 10px 24px rgba(217,70,239,0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      box-shadow: 0 12px 24px rgba(217, 70, 239, 0.24);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #fb7185, #ec4899, #d946ef);
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(90deg, #b388ff, #ec4899);
+      margin-top: 12px;
+      font-size: 18px;
+      padding: 15px;
+    }
+
+    .btn-copy {
+      background: linear-gradient(90deg, #f9a8d4, #f472b6);
+      margin-top: 12px;
+      font-size: 18px;
+      padding: 15px;
     }
 
     .result {
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 20px;
+      margin-top: 22px;
+      padding: 18px;
+      border-radius: 24px;
       background: #fff0f7;
-      border: 2px solid #fbcfe8;
+      border: 3px solid #fbcfe8;
       text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
     }
 
     .result-main {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: 21px;
+      font-weight: 800;
       color: #374151;
     }
 
     .result-main span {
       color: #ec4899;
-      font-size: 24px;
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .status {
+      margin-top: 10px;
       font-weight: 800;
+      color: #d946ef;
+      text-align: center;
+      font-size: 15px;
     }
 
     .details {
@@ -132,24 +195,61 @@
       text-align: left;
       font-size: 14px;
       color: #4b5563;
-      line-height: 1.6;
+      line-height: 1.7;
       white-space: pre-line;
+      background: rgba(255,255,255,0.7);
+      border-radius: 16px;
+      padding: 13px;
     }
 
-    .status {
+    .mini-msg {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #6b7280;
+      text-align: left;
+      white-space: pre-line;
+      background: rgba(255,255,255,0.6);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .tiny-badge {
+      display: inline-block;
       margin-top: 10px;
-      font-weight: 700;
-      color: #d946ef;
-      text-align: center;
+      background: #ffe2f1;
+      color: #db2777;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 999px;
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translateX(-50%);
+      background: #ec4899;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(236, 72, 153, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 10000;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
     }
 
     #splash-screen {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(180deg,#fff0f7,#ffe4f1);
+      inset: 0;
+      background: linear-gradient(180deg, #fff1f8, #ffe5f1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -158,33 +258,48 @@
 
     .splash-content {
       text-align: center;
+      padding: 20px;
     }
 
     .splash-logo {
-      width: 110px;
-      height: 110px;
-      border-radius: 26px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
       margin-bottom: 14px;
+      object-fit: cover;
+      animation: floatLogo 1.8s ease-in-out infinite;
     }
 
     .splash-content h1 {
       margin: 0;
       font-size: 32px;
       color: #ec4899;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .splash-content p {
       margin-top: 8px;
       color: #7a4b63;
       font-size: 16px;
+      font-weight: 700;
+    }
+
+    .sparkles {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    @keyframes floatLogo {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
     }
   </style>
 </head>
 <body>
   <div id="splash-screen">
     <div class="splash-content">
+      <div class="sparkles">✨💖✨</div>
       <img src="icon-192.jpg" alt="Miri Shop" class="splash-logo">
       <h1>Miri Shop</h1>
       <p>Cargando...</p>
@@ -195,7 +310,8 @@
     <div class="center">
       <div class="emoji">💖</div>
       <h1>MIRI SHOP</h1>
-      <div class="subtitle">Calculadora de Reembolsos</div>
+      <div class="subtitle">Calculadora kawaii de reembolsos</div>
+      <div class="tiny-badge">🌸 Bonita, rápida y fácil 🌸</div>
     </div>
 
     <div class="title2 center">Resultado</div>
@@ -218,23 +334,30 @@
     <div class="field">
       <label for="fechaEntrega">Fecha de entrega</label>
       <input id="fechaEntrega" type="date">
+      <div class="date-note">Selecciona la fecha en que entregaste el servicio.</div>
     </div>
 
     <div class="field">
       <label for="fechaCaida">Fecha de caída</label>
       <input id="fechaCaida" type="date">
+      <div class="date-note">Selecciona la fecha en que dejó de funcionar.</div>
     </div>
 
-    <button onclick="calcularReembolso()">Calcular reembolso</button>
+    <button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
+    <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
+    <button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
 
     <div class="result">
       <div class="result-main">
         Reembolso: <span id="resultado">$0.00</span>
       </div>
       <div class="status" id="estadoGarantia"></div>
-      <div class="details" id="detalleResultado"></div>
+      <div class="details" id="detalleResultado">Aquí aparecerá el detalle del cálculo.</div>
+      <div class="mini-msg" id="mensajeCompartir">Primero calcula el reembolso.</div>
     </div>
   </div>
+
+  <div id="toast">Copiado 💖</div>
 
   <script>
     function diferenciaDias(fechaInicio, fechaFin) {
@@ -242,6 +365,24 @@
       const fin = new Date(fechaFin + "T00:00:00");
       const msPorDia = 1000 * 60 * 60 * 24;
       return Math.floor((fin - inicio) / msPorDia);
+    }
+
+    function formatearFecha(fechaTexto) {
+      const fecha = new Date(fechaTexto + "T00:00:00");
+      return fecha.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    }
+
+    function mostrarToast(texto) {
+      const toast = document.getElementById("toast");
+      toast.textContent = texto;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1800);
     }
 
     function calcularReembolso() {
@@ -254,6 +395,7 @@
       const resultado = document.getElementById("resultado");
       const detalle = document.getElementById("detalleResultado");
       const estado = document.getElementById("estadoGarantia");
+      const mensajeCompartir = document.getElementById("mensajeCompartir");
 
       if (
         isNaN(precio) ||
@@ -262,7 +404,7 @@
         !fechaEntrega ||
         !fechaCaida
       ) {
-        alert("Completa todos los campos.");
+        alert("Completa todos los campos, linda 💖");
         return;
       }
 
@@ -290,11 +432,11 @@
       if (diasUsados < diasGarantia) {
         diasFaltantesGarantia = diasGarantia - diasUsados;
         reembolso = valorPorDia * diasFaltantesGarantia;
-        estado.textContent = "Cayó dentro de garantía";
+        estado.textContent = "💗 Cayó dentro de garantía";
       } else {
         diasFaltantesGarantia = 0;
         reembolso = 0;
-        estado.textContent = "Fuera de garantía";
+        estado.textContent = "💔 Fuera de garantía";
       }
 
       resultado.textContent = "$" + reembolso.toFixed(2);
@@ -304,6 +446,46 @@
         "Días de garantía: " + diasGarantia + "\n" +
         "Días faltantes por cubrir garantía: " + diasFaltantesGarantia + "\n" +
         "Valor por día: $" + valorPorDia.toFixed(2);
+
+      const texto =
+        "Hola 🌸\n" +
+        "Te comparto el cálculo de tu reembolso en Miri Shop:\n\n" +
+        "• Precio del servicio: $" + precio.toFixed(2) + "\n" +
+        "• Tiempo contratado: " + tiempoContratado + " días\n" +
+        "• Días de garantía: " + diasGarantia + " días\n" +
+        "• Fecha de entrega: " + formatearFecha(fechaEntrega) + "\n" +
+        "• Fecha de caída: " + formatearFecha(fechaCaida) + "\n" +
+        "• Días usados: " + diasUsados + "\n" +
+        "• Días faltantes por cubrir garantía: " + diasFaltantesGarantia + "\n" +
+        "• Reembolso: $" + reembolso.toFixed(2) + "\n\n" +
+        "Gracias por comprar en Miri Shop 💖";
+
+      mensajeCompartir.textContent = texto;
+    }
+
+    function enviarWhatsApp() {
+      const mensaje = document.getElementById("mensajeCompartir").textContent;
+      if (!mensaje || mensaje === "Primero calcula el reembolso.") {
+        alert("Primero calcula el reembolso.");
+        return;
+      }
+      const url = "https://wa.me/?text=" + encodeURIComponent(mensaje);
+      window.open(url, "_blank");
+    }
+
+    async function copiarMensaje() {
+      const mensaje = document.getElementById("mensajeCompartir").textContent;
+      if (!mensaje || mensaje === "Primero calcula el reembolso.") {
+        alert("Primero calcula el reembolso.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(mensaje);
+        mostrarToast("Resultado copiado 💖");
+      } catch (error) {
+        mostrarToast("No se pudo copiar");
+      }
     }
 
     window.addEventListener("load", function() {
@@ -318,4 +500,4 @@
     });
   </script>
 </body>
-        </html>
+  </html>
