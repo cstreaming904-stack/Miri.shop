@@ -171,6 +171,13 @@ margin-top:12px;
 font-size:18px;
 }
 
+.btn-install{
+background:linear-gradient(90deg,#f472b6,#db2777);
+margin-top:12px;
+font-size:18px;
+display:none;
+}
+
 .result{
 margin-top:22px;
 padding:18px;
@@ -233,6 +240,7 @@ border-radius:999px;
 font-weight:800;
 opacity:0;
 transition:.25s;
+z-index:99999;
 }
 
 #toast.show{
@@ -259,6 +267,14 @@ height:120px;
 border-radius:28px;
 box-shadow:0 12px 30px rgba(0,0,0,0.15);
 margin-bottom:14px;
+object-fit:cover;
+}
+
+.install-note{
+margin-top:10px;
+font-size:12px;
+color:#9ca3af;
+text-align:center;
 }
 
 </style>
@@ -268,7 +284,7 @@ margin-bottom:14px;
 
 <div id="splash-screen">
 <div class="splash-content">
-<img src="icon-192.jpg" class="splash-logo">
+<img src="icon-512.jpg" class="splash-logo" alt="Miri Shop">
 <h1>Miri Shop</h1>
 <p>Cargando...</p>
 </div>
@@ -311,22 +327,18 @@ margin-bottom:14px;
 
 <div class="field">
 <label>Fecha de entrega</label>
-
 <div class="date-box">
 <input id="fechaEntrega" type="date">
 <span class="icono">📅</span>
 </div>
-
 </div>
 
 <div class="field">
 <label>Fecha de caída</label>
-
 <div class="date-box">
 <input id="fechaCaida" type="date">
 <span class="icono">📅</span>
 </div>
-
 </div>
 
 <button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
@@ -334,6 +346,12 @@ margin-bottom:14px;
 <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
 
 <button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
+
+<button id="installBtn" class="btn btn-install">Instalar app 🎀</button>
+
+<div class="install-note" id="installNote">
+Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
+</div>
 
 <div class="result">
 
@@ -355,53 +373,81 @@ Reembolso: <span id="resultado">$0.00</span>
 
 <script>
 
+let deferredPrompt = null;
+const installBtn = document.getElementById("installBtn");
+const installNote = document.getElementById("installNote");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    mostrarToast("Usa Agregar a pantalla de inicio 💖");
+    return;
+  }
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
 function diferenciaDias(inicio,fin){
-const i=new Date(inicio+"T00:00:00")
-const f=new Date(fin+"T00:00:00")
-return Math.floor((f-i)/(1000*60*60*24))
+const i=new Date(inicio+"T00:00:00");
+const f=new Date(fin+"T00:00:00");
+return Math.floor((f-i)/(1000*60*60*24));
 }
 
 function formatearFecha(fecha){
-const f=new Date(fecha+"T00:00:00")
-return f.toLocaleDateString("es-MX")
+const f=new Date(fecha+"T00:00:00");
+return f.toLocaleDateString("es-MX");
+}
+
+function mostrarToast(texto){
+const toast=document.getElementById("toast");
+toast.textContent=texto;
+toast.classList.add("show");
+setTimeout(()=>toast.classList.remove("show"),1500);
 }
 
 function calcularReembolso(){
 
-const precio=parseFloat(precio.value)
-const plan=parseInt(tiempoContratado.value)
-const garantia=parseInt(diasGarantia.value)
-const entrega=fechaEntrega.value
-const caida=fechaCaida.value
+const precio=parseFloat(document.getElementById("precio").value);
+const plan=parseInt(document.getElementById("tiempoContratado").value);
+const garantia=parseInt(document.getElementById("diasGarantia").value);
+const entrega=document.getElementById("fechaEntrega").value;
+const caida=document.getElementById("fechaCaida").value;
 
 if(!precio||!plan||!garantia||!entrega||!caida){
-alert("Completa todos los campos 💖")
-return
+alert("Completa todos los campos 💖");
+return;
 }
 
-const usados=diferenciaDias(entrega,caida)
-const valorDia=precio/plan
+const usados=diferenciaDias(entrega,caida);
+const valorDia=precio/plan;
 
-let faltantes=0
-let reembolso=0
+let faltantes=0;
+let reembolso=0;
 
 if(usados<garantia){
-faltantes=garantia-usados
-reembolso=valorDia*faltantes
-estadoGarantia.textContent="💗 Cayó dentro de garantía"
+faltantes=garantia-usados;
+reembolso=valorDia*faltantes;
+document.getElementById("estadoGarantia").textContent="💗 Cayó dentro de garantía";
 }else{
-estadoGarantia.textContent="💔 Fuera de garantía"
+document.getElementById("estadoGarantia").textContent="💔 Fuera de garantía";
 }
 
-resultado.textContent="$"+reembolso.toFixed(2)
+document.getElementById("resultado").textContent="$"+reembolso.toFixed(2);
 
-detalleResultado.textContent=
+document.getElementById("detalleResultado").textContent=
 "Días usados: "+usados+"\n"+
 "Días garantía: "+garantia+"\n"+
 "Días faltantes garantía: "+faltantes+"\n"+
-"Valor por día: $"+valorDia.toFixed(2)
+"Valor por día: $"+valorDia.toFixed(2);
 
-mensajeCompartir.textContent=
+document.getElementById("mensajeCompartir").textContent=
 "Hola 🌸\n"+
 "Este es tu cálculo de reembolso en Miri Shop:\n\n"+
 "Precio: $"+precio.toFixed(2)+"\n"+
@@ -410,31 +456,30 @@ mensajeCompartir.textContent=
 "Entrega: "+formatearFecha(entrega)+"\n"+
 "Caída: "+formatearFecha(caida)+"\n"+
 "Reembolso: $"+reembolso.toFixed(2)+"\n\n"+
-"Gracias por comprar en Miri Shop 💖"
+"Gracias por comprar en Miri Shop 💖";
 
 }
 
 function enviarWhatsApp(){
-const msg=encodeURIComponent(mensajeCompartir.textContent)
-window.open("https://wa.me/?text="+msg)
+const msg=encodeURIComponent(document.getElementById("mensajeCompartir").textContent);
+window.open("https://wa.me/?text="+msg);
 }
 
 async function copiarMensaje(){
-await navigator.clipboard.writeText(mensajeCompartir.textContent)
-toast.classList.add("show")
-setTimeout(()=>toast.classList.remove("show"),1500)
+await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
+mostrarToast("Copiado 💖");
 }
 
 window.addEventListener("load",function(){
 setTimeout(()=>{
-let splash=document.getElementById("splash-screen")
-splash.style.opacity="0"
-splash.style.transition="opacity .5s"
-setTimeout(()=>splash.style.display="none",500)
-},1200)
-})
+let splash=document.getElementById("splash-screen");
+splash.style.opacity="0";
+splash.style.transition="opacity .5s";
+setTimeout(()=>splash.style.display="none",500);
+},1200);
+});
 
 </script>
 
 </body>
-</html>
+  </html>l
