@@ -1,6 +1,6 @@
 {
-  "name": "Calculadora para Reembolsos Miri Shop",
-  "short_name": "Reembolsos Miri",
+  "name": "Calculadora de Reembolsos Miri Shop",
+  "short_name": "Miri Shop",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
