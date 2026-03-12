@@ -6,7 +6,7 @@
 
 <script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
+navigator.serviceWorker.register("service-worker.js");
 }
 </script>
 
@@ -36,7 +36,7 @@ color:#4b5563;
 .card{
 width:100%;
 max-width:450px;
-background:rgba(255,255,255,0.97);
+background:rgba(255,255,255,0.96);
 border:4px solid #bfdcff;
 border-radius:34px;
 box-shadow:0 18px 45px rgba(96,135,255,0.18);
@@ -284,7 +284,7 @@ text-align:center;
 
 <div id="splash-screen">
 <div class="splash-content">
-<img src="icon-512.jpg" class="splash-logo" alt="Shely Ventas">
+<img src="shely.jpg" class="splash-logo">
 <h1>Shely Ventas</h1>
 <p>Cargando...</p>
 </div>
@@ -304,7 +304,7 @@ text-align:center;
 
 <div class="subtitle">Calculadora de reembolsos</div>
 
-<div class="badge">✨ Kawaii, rápida y fácil ✨</div>
+<div class="badge">✨ Bonita, rápida y fácil ✨</div>
 
 </div>
 
@@ -312,17 +312,17 @@ text-align:center;
 
 <div class="field">
 <label>Precio del servicio</label>
-<input id="precio" type="number" placeholder="Ejemplo: 18">
+<input id="precio" type="number">
 </div>
 
 <div class="field">
 <label>Tiempo contratado (días)</label>
-<input id="tiempoContratado" type="number" placeholder="Ejemplo: 30">
+<input id="tiempoContratado" type="number">
 </div>
 
 <div class="field">
 <label>Días de garantía</label>
-<input id="diasGarantia" type="number" placeholder="Ejemplo: 7">
+<input id="diasGarantia" type="number">
 </div>
 
 <div class="field">
@@ -347,12 +347,6 @@ text-align:center;
 
 <button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
 
-<button id="installBtn" class="btn btn-install">Instalar app 🎀</button>
-
-<div class="install-note" id="installNote">
-Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
-</div>
-
 <div class="result">
 
 <div class="result-main">
@@ -361,9 +355,9 @@ Reembolso: <span id="resultado">$0.00</span>
 
 <div class="status" id="estadoGarantia"></div>
 
-<div class="details" id="detalleResultado">Aquí aparecerá el detalle del cálculo.</div>
+<div class="details" id="detalleResultado"></div>
 
-<div class="mini-msg" id="mensajeCompartir">Primero calcula el reembolso.</div>
+<div class="mini-msg" id="mensajeCompartir"></div>
 
 </div>
 
@@ -373,43 +367,10 @@ Reembolso: <span id="resultado">$0.00</span>
 
 <script>
 
-let deferredPrompt = null;
-const installBtn = document.getElementById("installBtn");
-const installNote = document.getElementById("installNote");
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = "block";
-});
-
-installBtn.addEventListener("click", async () => {
-  if (!deferredPrompt) {
-    mostrarToast("Usa Agregar a pantalla de inicio 💙");
-    return;
-  }
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  installBtn.style.display = "none";
-});
-
 function diferenciaDias(inicio,fin){
 const i=new Date(inicio+"T00:00:00");
 const f=new Date(fin+"T00:00:00");
 return Math.floor((f-i)/(1000*60*60*24));
-}
-
-function formatearFecha(fecha){
-const f=new Date(fecha+"T00:00:00");
-return f.toLocaleDateString("es-MX");
-}
-
-function mostrarToast(texto){
-const toast=document.getElementById("toast");
-toast.textContent=texto;
-toast.classList.add("show");
-setTimeout(()=>toast.classList.remove("show"),1500);
 }
 
 function calcularReembolso(){
@@ -442,21 +403,14 @@ document.getElementById("estadoGarantia").textContent="💔 Fuera de garantía";
 document.getElementById("resultado").textContent="$"+reembolso.toFixed(2);
 
 document.getElementById("detalleResultado").textContent=
-"Días usados: "+usados+"\n"+
-"Días garantía: "+garantia+"\n"+
-"Días faltantes garantía: "+faltantes+"\n"+
-"Valor por día: $"+valorDia.toFixed(2);
+"Días usados: "+usados+
+"\nDías garantía: "+garantia+
+"\nDías faltantes garantía: "+faltantes+
+"\nValor por día: $"+valorDia.toFixed(2);
 
 document.getElementById("mensajeCompartir").textContent=
-"Hola 🌸\n"+
-"Este es tu cálculo de reembolso en Shely Ventas:\n\n"+
-"Precio: $"+precio.toFixed(2)+"\n"+
-"Plan: "+plan+" días\n"+
-"Garantía: "+garantia+" días\n"+
-"Entrega: "+formatearFecha(entrega)+"\n"+
-"Caída: "+formatearFecha(caida)+"\n"+
-"Reembolso: $"+reembolso.toFixed(2)+"\n\n"+
-"Gracias por comprar en Shely Ventas 💖";
+"Hola 🌸\nEste es tu cálculo de reembolso en Shely Ventas\n\n"+
+"Reembolso: $"+reembolso.toFixed(2);
 
 }
 
@@ -467,17 +421,10 @@ window.open("https://wa.me/?text="+msg);
 
 async function copiarMensaje(){
 await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
-mostrarToast("Copiado 💙");
+const toast=document.getElementById("toast");
+toast.classList.add("show");
+setTimeout(()=>toast.classList.remove("show"),1500);
 }
-
-window.addEventListener("load",function(){
-setTimeout(()=>{
-let splash=document.getElementById("splash-screen");
-splash.style.opacity="0";
-splash.style.transition="opacity .5s";
-setTimeout(()=>splash.style.display="none",500);
-},1200);
-});
 
 </script>
 
