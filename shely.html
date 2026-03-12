@@ -1,407 +1,588 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<link rel="manifest" href="manifest.json">
-
-<script>
-if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("service-worker.js");
-}
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Shely Ventas - Calculadora de Reembolsos</title>
 
-<style>
+<link rel="manifest" href="manifest.json">
 
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
+<style>
 *{
-box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:radial-gradient(circle at top,#e8f4ff 0%,#dbeafe 30%,#f3e8ff 65%,#fff1f8 100%);
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:22px;
-color:#4b5563;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at top,#e8f4ff 0%,#dbeafe 30%,#f3e8ff 65%,#fff1f8 100%);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  color:#4b5563;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.8) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(255,192,203,.55) 0 2px, transparent 3px),
+    radial-gradient(circle, rgba(147,197,253,.5) 0 2px, transparent 3px);
+  background-size:120px 120px, 180px 180px, 220px 220px;
+  background-position:10px 10px, 60px 40px, 120px 80px;
+  animation:floatSparkles 14s linear infinite;
+  opacity:.5;
+}
+
+@keyframes floatSparkles{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-12px);}
+  100%{transform:translateY(0);}
 }
 
 .card{
-width:100%;
-max-width:450px;
-background:rgba(255,255,255,0.96);
-border:4px solid #bfdcff;
-border-radius:34px;
-box-shadow:0 18px 45px rgba(96,135,255,0.18);
-padding:24px;
-position:relative;
-overflow:hidden;
+  width:100%;
+  max-width:450px;
+  background:rgba(255,255,255,0.96);
+  border:4px solid #bfdcff;
+  border-radius:34px;
+  box-shadow:0 18px 45px rgba(96,135,255,0.18);
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+  animation:cardPop .6s ease;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:radial-gradient(circle, rgba(255,255,255,.45), transparent 55%);
+  animation:shineMove 8s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes shineMove{
+  0%{transform:translate(-30%,-30%) rotate(0deg);}
+  100%{transform:translate(30%,30%) rotate(360deg);}
+}
+
+@keyframes cardPop{
+  from{
+    opacity:0;
+    transform:translateY(18px) scale(.98);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
 }
 
 .center{
-text-align:center;
+  text-align:center;
 }
 
 .emoji{
-font-size:42px;
-margin-bottom:6px;
+  font-size:42px;
+  margin-bottom:6px;
+  animation:bounceCute 2s infinite;
+}
+
+@keyframes bounceCute{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-5px);}
 }
 
 h1{
-margin:0;
-color:#2563eb;
-font-size:30px;
-font-weight:900;
+  margin:0;
+  color:#2563eb;
+  font-size:30px;
+  font-weight:900;
+  text-shadow:0 2px 0 rgba(255,255,255,.7);
 }
 
 .phone{
-margin-top:6px;
-font-size:14px;
-font-weight:700;
+  margin-top:6px;
+  font-size:14px;
+  font-weight:700;
 }
 
 .phone a{
-color:#ec4899;
-text-decoration:none;
+  color:#ec4899;
+  text-decoration:none;
 }
 
 .subtitle{
-margin-top:6px;
-color:#d946ef;
-font-weight:700;
-font-size:16px;
+  margin-top:6px;
+  color:#d946ef;
+  font-weight:700;
+  font-size:16px;
 }
 
 .badge{
-display:inline-block;
-margin-top:10px;
-background:#fce7f3;
-color:#db2777;
-font-weight:800;
-font-size:12px;
-padding:7px 12px;
-border-radius:999px;
+  display:inline-block;
+  margin-top:10px;
+  background:#fce7f3;
+  color:#db2777;
+  font-weight:800;
+  font-size:12px;
+  padding:7px 12px;
+  border-radius:999px;
+  box-shadow:0 6px 14px rgba(236,72,153,.12);
 }
 
 .title2{
-margin-top:18px;
-color:#374151;
-font-size:28px;
-font-weight:900;
-text-align:center;
+  margin-top:18px;
+  color:#374151;
+  font-size:28px;
+  font-weight:900;
+  text-align:center;
 }
 
 .field{
-margin-top:15px;
+  margin-top:15px;
 }
 
 label{
-display:block;
-color:#2563eb;
-font-size:15px;
-font-weight:800;
-margin-bottom:9px;
+  display:block;
+  color:#2563eb;
+  font-size:15px;
+  font-weight:800;
+  margin-bottom:9px;
 }
 
 input{
-width:100%;
-border:3px solid #c7d2fe;
-background:#f8fbff;
-border-radius:20px;
-padding:15px;
-font-size:18px;
-outline:none;
+  width:100%;
+  border:3px solid #c7d2fe;
+  background:#f8fbff;
+  border-radius:20px;
+  padding:15px;
+  font-size:18px;
+  outline:none;
+  color:#374151;
+  transition:.2s ease;
+}
+
+input:focus{
+  border-color:#ec4899;
+  box-shadow:0 0 0 4px rgba(236,72,153,.12);
+  transform:translateY(-1px);
 }
 
 .date-box{
-position:relative;
+  position:relative;
+}
+
+.date-box input{
+  padding-right:46px;
 }
 
 .icono{
-position:absolute;
-right:14px;
-top:50%;
-transform:translateY(-50%);
-font-size:18px;
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:18px;
 }
 
 .btn{
-width:100%;
-margin-top:18px;
-border:0;
-border-radius:22px;
-padding:16px;
-font-size:18px;
-font-weight:900;
-color:white;
-cursor:pointer;
+  width:100%;
+  margin-top:18px;
+  border:0;
+  border-radius:22px;
+  padding:16px;
+  font-size:18px;
+  font-weight:900;
+  color:white;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.btn::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-120%;
+  width:70%;
+  height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+  transform:skewX(-25deg);
+}
+
+.btn:hover::before,
+.btn:active::before{
+  animation:btnShine .9s ease;
+}
+
+@keyframes btnShine{
+  from{left:-120%;}
+  to{left:160%;}
+}
+
+.btn:hover,
+.btn:active{
+  transform:translateY(-2px) scale(1.01);
+  filter:brightness(1.03);
+}
+
+.btn:active{
+  transform:scale(.99);
 }
 
 .btn-primary{
-background:linear-gradient(90deg,#60a5fa,#2563eb,#ec4899);
+  background:linear-gradient(90deg,#60a5fa,#2563eb,#ec4899);
+  box-shadow:0 14px 28px rgba(37,99,235,.25);
 }
 
 .btn-whatsapp{
-background:linear-gradient(90deg,#8b5cf6,#ec4899);
+  background:linear-gradient(90deg,#8b5cf6,#ec4899);
+  box-shadow:0 14px 28px rgba(217,70,239,.22);
 }
 
 .btn-copy{
-background:linear-gradient(90deg,#93c5fd,#f472b6);
+  background:linear-gradient(90deg,#93c5fd,#f472b6);
+  box-shadow:0 14px 28px rgba(244,114,182,.18);
+}
+
+.btn-install{
+  background:linear-gradient(90deg,#3b82f6,#ec4899);
+  box-shadow:0 14px 28px rgba(59,130,246,.22);
+  display:none;
 }
 
 .result{
-margin-top:22px;
-padding:18px;
-border-radius:24px;
-background:#f9fbff;
-border:3px solid #dbeafe;
-text-align:center;
+  margin-top:22px;
+  padding:18px;
+  border-radius:24px;
+  background:#f9fbff;
+  border:3px solid #dbeafe;
+  text-align:center;
 }
 
 .result-main{
-font-size:22px;
-font-weight:800;
+  font-size:22px;
+  font-weight:800;
 }
 
 .result-main span{
-color:#ec4899;
-font-size:28px;
-font-weight:900;
+  color:#ec4899;
+  font-size:28px;
+  font-weight:900;
 }
 
 .status{
-margin-top:10px;
-font-weight:800;
-color:#2563eb;
+  margin-top:10px;
+  font-weight:800;
+  color:#2563eb;
 }
 
 .details{
-margin-top:12px;
-text-align:left;
-font-size:14px;
-white-space:pre-line;
-background:rgba(255,255,255,0.85);
-border-radius:16px;
-padding:13px;
+  margin-top:12px;
+  text-align:left;
+  font-size:14px;
+  white-space:pre-line;
+  background:rgba(255,255,255,0.85);
+  border-radius:16px;
+  padding:13px;
 }
 
 .mini-msg{
-margin-top:12px;
-font-size:13px;
-text-align:left;
-white-space:pre-line;
-background:rgba(255,255,255,0.75);
-border-radius:16px;
-padding:12px;
+  margin-top:12px;
+  font-size:13px;
+  text-align:left;
+  white-space:pre-line;
+  background:rgba(255,255,255,0.75);
+  border-radius:16px;
+  padding:12px;
+}
+
+.install-note{
+  margin-top:10px;
+  font-size:12px;
+  color:#9ca3af;
+  text-align:center;
 }
 
 #toast{
-position:fixed;
-left:50%;
-bottom:28px;
-transform:translateX(-50%);
-background:#2563eb;
-color:white;
-padding:12px 18px;
-border-radius:999px;
-font-weight:800;
-opacity:0;
-transition:.25s;
+  position:fixed;
+  left:50%;
+  bottom:28px;
+  transform:translateX(-50%);
+  background:#2563eb;
+  color:white;
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:800;
+  opacity:0;
+  transition:.25s;
+  z-index:99999;
 }
 
 #toast.show{
-opacity:1;
+  opacity:1;
 }
 
 #splash-screen{
-position:fixed;
-inset:0;
-background:linear-gradient(180deg,#eef6ff,#ffeaf4);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
+  position:fixed;
+  inset:0;
+  background:linear-gradient(180deg,#eef6ff,#ffeaf4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
 }
 
 .splash-content{
-text-align:center;
+  text-align:center;
+  animation:fadeUp .7s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(16px);}
+  to{opacity:1; transform:translateY(0);}
 }
 
 .splash-logo{
-width:120px;
-height:120px;
-border-radius:28px;
-box-shadow:0 12px 30px rgba(0,0,0,0.15);
-margin-bottom:14px;
-object-fit:cover;
+  width:120px;
+  height:120px;
+  border-radius:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.15);
+  margin-bottom:14px;
+  object-fit:cover;
+  animation:logoPulse 2s ease-in-out infinite;
 }
 
+@keyframes logoPulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.04);}
+}
 </style>
 </head>
 
 <body>
 
 <div id="splash-screen">
-<div class="splash-content">
-<img src="shely.jpg" class="splash-logo">
-<h1>Shely Ventas</h1>
-<p>Cargando...</p>
-</div>
+  <div class="splash-content">
+    <img src="shely.jpg" class="splash-logo" alt="Shely Ventas">
+    <h1>Shely Ventas</h1>
+    <p>Cargando...</p>
+  </div>
 </div>
 
 <div class="card">
 
-<div class="center">
+  <div class="center">
+    <div class="emoji">💙</div>
+    <h1>SHELY VENTAS</h1>
 
-<div class="emoji">💙</div>
+    <div class="phone">
+      <a href="https://wa.me/526643179499">📱 +52 664 317 9499</a>
+    </div>
 
-<h1>SHELY VENTAS</h1>
+    <div class="subtitle">Calculadora de reembolsos</div>
+    <div class="badge">✨ Kawaii, rápida y fácil ✨</div>
+  </div>
 
-<div class="phone">
-<a href="https://wa.me/526643179499">📱 +52 664 317 9499</a>
-</div>
+  <div class="title2">Resultado</div>
 
-<div class="subtitle">Calculadora de reembolsos</div>
+  <div class="field">
+    <label>Precio del servicio</label>
+    <input id="precio" type="number" placeholder="Ejemplo: 15">
+  </div>
 
-<div class="badge">✨ Bonita, rápida y fácil ✨</div>
+  <div class="field">
+    <label>Tiempo contratado (días)</label>
+    <input id="tiempoContratado" type="number" placeholder="Ejemplo: 30">
+  </div>
 
-</div>
+  <div class="field">
+    <label>Días de garantía</label>
+    <input id="diasGarantia" type="number" placeholder="Ejemplo: 23">
+  </div>
 
-<div class="title2">Resultado</div>
+  <div class="field">
+    <label>Fecha de entrega</label>
+    <div class="date-box">
+      <input id="fechaEntrega" type="date">
+      <span class="icono">📅</span>
+    </div>
+  </div>
 
-<div class="field">
-<label>Precio del servicio</label>
-<input id="precio" type="number">
-</div>
+  <div class="field">
+    <label>Fecha de caída</label>
+    <div class="date-box">
+      <input id="fechaCaida" type="date">
+      <span class="icono">📅</span>
+    </div>
+  </div>
 
-<div class="field">
-<label>Tiempo contratado (días)</label>
-<input id="tiempoContratado" type="number">
-</div>
+  <div class="field">
+    <label>Número del cliente para WhatsApp</label>
+    <input id="telefonoCliente" type="tel" placeholder="Ejemplo: 526641234567">
+  </div>
 
-<div class="field">
-<label>Días de garantía</label>
-<input id="diasGarantia" type="number">
-</div>
+  <button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
+  <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
+  <button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
+  <button id="installBtn" class="btn btn-install">Instalar app 📱</button>
 
-<div class="field">
-<label>Fecha de entrega</label>
-<div class="date-box">
-<input id="fechaEntrega" type="date">
-<span class="icono">📅</span>
-</div>
-</div>
+  <div class="install-note" id="installNote">
+    Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
+  </div>
 
-<div class="field">
-<label>Fecha de caída</label>
-<div class="date-box">
-<input id="fechaCaida" type="date">
-<span class="icono">📅</span>
-</div>
-</div>
+  <div class="result">
+    <div class="result-main">
+      Reembolso: <span id="resultado">$0.00</span>
+    </div>
 
-<button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
-
-<button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
-
-<button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
-
-<div class="result">
-
-<div class="result-main">
-Reembolso: <span id="resultado">$0.00</span>
-</div>
-
-<div class="status" id="estadoGarantia"></div>
-
-<div class="details" id="detalleResultado"></div>
-
-<div class="mini-msg" id="mensajeCompartir"></div>
-
-</div>
+    <div class="status" id="estadoGarantia"></div>
+    <div class="details" id="detalleResultado">Aquí aparecerá el detalle del cálculo.</div>
+    <div class="mini-msg" id="mensajeCompartir">Primero calcula el reembolso.</div>
+  </div>
 
 </div>
 
 <div id="toast">Copiado 💙</div>
 
 <script>
+let deferredPrompt = null;
+const installBtn = document.getElementById("installBtn");
 
-function diferenciaDias(inicio,fin){
-const i=new Date(inicio+"T00:00:00");
-const f=new Date(fin+"T00:00:00");
-return Math.floor((f-i)/(1000*60*60*24));
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    mostrarToast("Usa Agregar a pantalla de inicio 📱");
+    return;
+  }
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
+function diferenciaDias(inicio, fin){
+  const i = new Date(inicio + "T00:00:00");
+  const f = new Date(fin + "T00:00:00");
+  return Math.floor((f - i) / (1000 * 60 * 60 * 24));
+}
+
+function formatearFecha(fecha){
+  const f = new Date(fecha + "T00:00:00");
+  return f.toLocaleDateString("es-MX");
+}
+
+function mostrarToast(texto){
+  const toast = document.getElementById("toast");
+  toast.textContent = texto;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1500);
+}
+
+function limpiarNumero(numero){
+  return numero.replace(/\D/g, "");
 }
 
 function calcularReembolso(){
+  const precio = parseFloat(document.getElementById("precio").value);
+  const plan = parseInt(document.getElementById("tiempoContratado").value);
+  const garantia = parseInt(document.getElementById("diasGarantia").value);
+  const entrega = document.getElementById("fechaEntrega").value;
+  const caida = document.getElementById("fechaCaida").value;
 
-const precio=parseFloat(document.getElementById("precio").value);
-const plan=parseInt(document.getElementById("tiempoContratado").value);
-const garantia=parseInt(document.getElementById("diasGarantia").value);
-const entrega=document.getElementById("fechaEntrega").value;
-const caida=document.getElementById("fechaCaida").value;
+  if (!precio || !plan || !garantia || !entrega || !caida){
+    alert("Completa todos los campos 💙");
+    return;
+  }
 
-if(!precio||!plan||!garantia||!entrega||!caida){
-alert("Completa todos los campos 💙");
-return;
-}
+  const usados = diferenciaDias(entrega, caida);
+  const valorDia = precio / plan;
 
-const usados=diferenciaDias(entrega,caida);
-const valorDia=precio/plan;
+  let faltantes = 0;
+  let reembolso = 0;
 
-let faltantes=0;
-let reembolso=0;
+  if (usados < garantia){
+    faltantes = garantia - usados;
+    reembolso = valorDia * faltantes;
+    document.getElementById("estadoGarantia").textContent = "💗 Cayó dentro de garantía";
+  } else {
+    document.getElementById("estadoGarantia").textContent = "💔 Fuera de garantía";
+  }
 
-if(usados<garantia){
-faltantes=garantia-usados;
-reembolso=valorDia*faltantes;
-document.getElementById("estadoGarantia").textContent="💗 Cayó dentro de garantía";
-}else{
-document.getElementById("estadoGarantia").textContent="💔 Fuera de garantía";
-}
+  document.getElementById("resultado").textContent = "$" + reembolso.toFixed(2);
 
-document.getElementById("resultado").textContent="$"+reembolso.toFixed(2);
+  document.getElementById("detalleResultado").textContent =
+    "Días usados: " + usados + "\n" +
+    "Días garantía: " + garantia + "\n" +
+    "Días faltantes garantía: " + faltantes + "\n" +
+    "Valor por día: $" + valorDia.toFixed(2);
 
-document.getElementById("detalleResultado").textContent=
-"Días usados: "+usados+
-"\nDías garantía: "+garantia+
-"\nDías faltantes garantía: "+faltantes+
-"\nValor por día: $"+valorDia.toFixed(2);
-
-document.getElementById("mensajeCompartir").textContent=
-"Hola 🌸\nEste es tu cálculo de reembolso en Shely Ventas\n\n"+
-"Reembolso: $"+reembolso.toFixed(2);
-
+  document.getElementById("mensajeCompartir").textContent =
+    "Hola 🌸\n" +
+    "Este es tu cálculo de reembolso en Shely Ventas:\n\n" +
+    "Precio: $" + precio.toFixed(2) + "\n" +
+    "Plan: " + plan + " días\n" +
+    "Garantía: " + garantia + " días\n" +
+    "Entrega: " + formatearFecha(entrega) + "\n" +
+    "Caída: " + formatearFecha(caida) + "\n" +
+    "Reembolso: $" + reembolso.toFixed(2) + "\n\n" +
+    "Gracias por comprar en Shely Ventas 💙";
 }
 
 function enviarWhatsApp(){
-const msg=encodeURIComponent(document.getElementById("mensajeCompartir").textContent);
-window.open("https://wa.me/?text="+msg);
+  const numero = limpiarNumero(document.getElementById("telefonoCliente").value);
+  const mensaje = document.getElementById("mensajeCompartir").textContent;
+
+  if (!mensaje || mensaje === "Primero calcula el reembolso."){
+    mostrarToast("Primero calcula el reembolso 💙");
+    return;
+  }
+
+  if (!numero){
+    mostrarToast("Escribe el número del cliente 📱");
+    return;
+  }
+
+  const msg = encodeURIComponent(mensaje);
+  window.open("https://wa.me/" + numero + "?text=" + msg, "_blank");
 }
 
 async function copiarMensaje(){
-await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
-const toast=document.getElementById("toast");
-toast.classList.add("show");
-setTimeout(()=>toast.classList.remove("show"),1500);
+  await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
+  mostrarToast("Copiado 💙");
 }
 
-window.addEventListener("load",function(){
-setTimeout(()=>{
-let splash=document.getElementById("splash-screen");
-splash.style.opacity="0";
-splash.style.transition="opacity .5s";
-setTimeout(()=>splash.style.display="none",500);
-},1200);
+window.addEventListener("load", function(){
+  setTimeout(() => {
+    const splash = document.getElementById("splash-screen");
+    splash.style.opacity = "0";
+    splash.style.transition = "opacity .5s";
+    setTimeout(() => {
+      splash.style.display = "none";
+    }, 500);
+  }, 1200);
 });
-
 </script>
 
 </body>
-  </html>
+</html>
