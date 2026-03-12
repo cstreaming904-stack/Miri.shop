@@ -1,90 +1,280 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+<link rel="manifest" href="manifest.json">
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Shely Ventas - Calculadora de Reembolsos</title>
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:linear-gradient(135deg,#6ec3ff,#ff8cc6);
-display:flex;
-justify-content:center;
-align-items:center;
+font-family:Arial,Helvetica,sans-serif;
+background:radial-gradient(circle at top,#e8f4ff 0%,#dbeafe 30%,#f3e8ff 65%,#fff1f8 100%);
 min-height:100vh;
-padding:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:22px;
+color:#4b5563;
 }
 
 .card{
-background:white;
-max-width:420px;
 width:100%;
-border-radius:30px;
-padding:25px;
-box-shadow:0 15px 40px rgba(0,0,0,0.15);
+max-width:450px;
+background:rgba(255,255,255,0.97);
+border:4px solid #bfdcff;
+border-radius:34px;
+box-shadow:0 18px 45px rgba(96,135,255,0.18);
+padding:24px;
+position:relative;
+overflow:hidden;
 }
 
 .center{
 text-align:center;
 }
 
-.logo{
-width:180px;
-margin-bottom:10px;
+.emoji{
+font-size:42px;
+margin-bottom:6px;
 }
 
 h1{
-margin:5px 0;
-color:#2f63ff;
+margin:0;
+color:#2563eb;
+font-size:30px;
+font-weight:900;
+letter-spacing:.5px;
 }
 
 .phone{
-font-weight:bold;
-color:#ff4fa3;
-margin-bottom:10px;
+margin-top:6px;
+font-size:14px;
+font-weight:700;
+}
+
+.phone a{
+color:#ec4899;
+text-decoration:none;
 }
 
 .subtitle{
-color:#666;
-margin-bottom:20px;
+margin-top:6px;
+color:#d946ef;
+font-weight:700;
+font-size:16px;
+}
+
+.badge{
+display:inline-block;
+margin-top:10px;
+background:#fce7f3;
+color:#db2777;
+font-weight:800;
+font-size:12px;
+padding:7px 12px;
+border-radius:999px;
+}
+
+.title2{
+margin-top:18px;
+color:#374151;
+font-size:28px;
+font-weight:900;
+}
+
+.field{
+margin-top:15px;
+}
+
+label{
+display:block;
+color:#2563eb;
+font-size:15px;
+font-weight:800;
+margin-bottom:9px;
 }
 
 input{
 width:100%;
-padding:12px;
-border-radius:12px;
-border:2px solid #ffd1e6;
-margin-bottom:10px;
-font-size:16px;
+border:3px solid #c7d2fe;
+background:#f8fbff;
+border-radius:20px;
+padding:15px 16px;
+font-size:18px;
+outline:none;
+color:#374151;
 }
 
-button{
+input:focus{
+border-color:#ec4899;
+box-shadow:0 0 0 4px rgba(236,72,153,0.10);
+}
+
+.date-box{
+position:relative;
+}
+
+.date-box input{
+padding-right:50px;
+}
+
+.icono{
+position:absolute;
+right:14px;
+top:50%;
+transform:translateY(-50%);
+font-size:18px;
+}
+
+.btn{
 width:100%;
-padding:14px;
-border:none;
-border-radius:15px;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-margin-top:10px;
-background:linear-gradient(90deg,#ff6fb2,#7bbcff);
+margin-top:18px;
+border:0;
+border-radius:22px;
+padding:16px;
+font-size:20px;
+font-weight:900;
 color:white;
+cursor:pointer;
+box-shadow:0 12px 24px rgba(96,135,255,0.22);
+}
+
+.btn-primary{
+background:linear-gradient(90deg,#60a5fa,#2563eb,#ec4899);
+}
+
+.btn-whatsapp{
+background:linear-gradient(90deg,#8b5cf6,#ec4899);
+margin-top:12px;
+font-size:18px;
+}
+
+.btn-copy{
+background:linear-gradient(90deg,#93c5fd,#f472b6);
+margin-top:12px;
+font-size:18px;
+}
+
+.btn-install{
+background:linear-gradient(90deg,#3b82f6,#ec4899);
+margin-top:12px;
+font-size:18px;
+display:none;
 }
 
 .result{
-margin-top:20px;
-padding:15px;
-background:#f7f7ff;
-border-radius:15px;
+margin-top:22px;
+padding:18px;
+border-radius:24px;
+background:#f9fbff;
+border:3px solid #dbeafe;
+text-align:center;
 }
 
-.reembolso{
-font-size:24px;
-font-weight:bold;
-color:#ff4fa3;
+.result-main{
+font-size:21px;
+font-weight:800;
+color:#374151;
+}
+
+.result-main span{
+color:#ec4899;
+font-size:27px;
+font-weight:900;
+}
+
+.status{
+margin-top:10px;
+font-weight:800;
+color:#2563eb;
+text-align:center;
+font-size:15px;
+}
+
+.details{
+margin-top:12px;
+text-align:left;
+font-size:14px;
+line-height:1.7;
+white-space:pre-line;
+background:rgba(255,255,255,0.85);
+border-radius:16px;
+padding:13px;
+}
+
+.mini-msg{
+margin-top:12px;
+font-size:13px;
+text-align:left;
+white-space:pre-line;
+background:rgba(255,255,255,0.75);
+border-radius:16px;
+padding:12px;
+}
+
+#toast{
+position:fixed;
+left:50%;
+bottom:28px;
+transform:translateX(-50%);
+background:#2563eb;
+color:white;
+padding:12px 18px;
+border-radius:999px;
+font-weight:800;
+opacity:0;
+transition:.25s;
+z-index:99999;
+}
+
+#toast.show{
+opacity:1;
+}
+
+#splash-screen{
+position:fixed;
+inset:0;
+background:linear-gradient(180deg,#eef6ff,#ffeaf4);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.splash-content{
+text-align:center;
+}
+
+.splash-logo{
+width:120px;
+height:120px;
+border-radius:28px;
+box-shadow:0 12px 30px rgba(0,0,0,0.15);
+margin-bottom:14px;
+object-fit:cover;
+}
+
+.install-note{
+margin-top:10px;
+font-size:12px;
+color:#9ca3af;
+text-align:center;
 }
 
 </style>
@@ -92,74 +282,204 @@ color:#ff4fa3;
 
 <body>
 
+<div id="splash-screen">
+<div class="splash-content">
+<img src="icon-512.jpg" class="splash-logo" alt="Shely Ventas">
+<h1>Shely Ventas</h1>
+<p>Cargando...</p>
+</div>
+</div>
+
 <div class="card">
 
 <div class="center">
 
-<img src="https://i.imgur.com/3yafF6E.png" class="logo">
+<div class="emoji">💙</div>
 
-<h1>Shely Ventas</h1>
+<h1>SHELY VENTAS</h1>
 
-<div class="phone">+52 664 317 9499</div>
+<div class="phone">
+<a href="https://wa.me/526643179499">📱 +52 664 317 9499</a>
+</div>
 
 <div class="subtitle">Calculadora de reembolsos</div>
 
+<div class="badge">✨ Kawaii, rápida y fácil ✨</div>
+
 </div>
 
+<div class="title2 center">Resultado</div>
+
+<div class="field">
 <label>Precio del servicio</label>
-<input id="precio" type="number">
+<input id="precio" type="number" placeholder="Ejemplo: 18">
+</div>
 
+<div class="field">
 <label>Tiempo contratado (días)</label>
-<input id="plan" type="number">
+<input id="tiempoContratado" type="number" placeholder="Ejemplo: 30">
+</div>
 
+<div class="field">
 <label>Días de garantía</label>
-<input id="garantia" type="number">
+<input id="diasGarantia" type="number" placeholder="Ejemplo: 7">
+</div>
 
-<label>Días usados</label>
-<input id="usados" type="number">
+<div class="field">
+<label>Fecha de entrega</label>
+<div class="date-box">
+<input id="fechaEntrega" type="date">
+<span class="icono">📅</span>
+</div>
+</div>
 
-<button onclick="calcular()">Calcular reembolso</button>
+<div class="field">
+<label>Fecha de caída</label>
+<div class="date-box">
+<input id="fechaCaida" type="date">
+<span class="icono">📅</span>
+</div>
+</div>
 
-<div class="result" id="resultado" style="display:none">
+<button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
 
-<div class="reembolso" id="reembolso"></div>
+<button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
 
-<div id="detalle"></div>
+<button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
+
+<button id="installBtn" class="btn btn-install">Instalar app 🎀</button>
+
+<div class="install-note" id="installNote">
+Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
+</div>
+
+<div class="result">
+
+<div class="result-main">
+Reembolso: <span id="resultado">$0.00</span>
+</div>
+
+<div class="status" id="estadoGarantia"></div>
+
+<div class="details" id="detalleResultado">Aquí aparecerá el detalle del cálculo.</div>
+
+<div class="mini-msg" id="mensajeCompartir">Primero calcula el reembolso.</div>
 
 </div>
 
 </div>
+
+<div id="toast">Copiado 💙</div>
 
 <script>
 
-function calcular(){
+let deferredPrompt = null;
+const installBtn = document.getElementById("installBtn");
+const installNote = document.getElementById("installNote");
 
-let precio = parseFloat(document.getElementById("precio").value);
-let plan = parseFloat(document.getElementById("plan").value);
-let garantia = parseFloat(document.getElementById("garantia").value);
-let usados = parseFloat(document.getElementById("usados").value);
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
 
-let valorDia = precio / plan;
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    mostrarToast("Usa Agregar a pantalla de inicio 💙");
+    return;
+  }
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
 
-let faltantes = garantia - usados;
-
-if(faltantes < 0){
-faltantes = 0;
+function diferenciaDias(inicio,fin){
+const i=new Date(inicio+"T00:00:00");
+const f=new Date(fin+"T00:00:00");
+return Math.floor((f-i)/(1000*60*60*24));
 }
 
-let reembolso = valorDia * faltantes;
+function formatearFecha(fecha){
+const f=new Date(fecha+"T00:00:00");
+return f.toLocaleDateString("es-MX");
+}
 
-document.getElementById("resultado").style.display="block";
+function mostrarToast(texto){
+const toast=document.getElementById("toast");
+toast.textContent=texto;
+toast.classList.add("show");
+setTimeout(()=>toast.classList.remove("show"),1500);
+}
 
-document.getElementById("reembolso").innerHTML = "Reembolso: $" + reembolso.toFixed(2);
+function calcularReembolso(){
 
-document.getElementById("detalle").innerHTML = 
-"Valor por día: $" + valorDia.toFixed(2) + "<br>" +
-"Días restantes de garantía: " + faltantes;
+const precio=parseFloat(document.getElementById("precio").value);
+const plan=parseInt(document.getElementById("tiempoContratado").value);
+const garantia=parseInt(document.getElementById("diasGarantia").value);
+const entrega=document.getElementById("fechaEntrega").value;
+const caida=document.getElementById("fechaCaida").value;
+
+if(!precio||!plan||!garantia||!entrega||!caida){
+alert("Completa todos los campos 💙");
+return;
+}
+
+const usados=diferenciaDias(entrega,caida);
+const valorDia=precio/plan;
+
+let faltantes=0;
+let reembolso=0;
+
+if(usados<garantia){
+faltantes=garantia-usados;
+reembolso=valorDia*faltantes;
+document.getElementById("estadoGarantia").textContent="💗 Cayó dentro de garantía";
+}else{
+document.getElementById("estadoGarantia").textContent="💔 Fuera de garantía";
+}
+
+document.getElementById("resultado").textContent="$"+reembolso.toFixed(2);
+
+document.getElementById("detalleResultado").textContent=
+"Días usados: "+usados+"\n"+
+"Días garantía: "+garantia+"\n"+
+"Días faltantes garantía: "+faltantes+"\n"+
+"Valor por día: $"+valorDia.toFixed(2);
+
+document.getElementById("mensajeCompartir").textContent=
+"Hola 🌸\n"+
+"Este es tu cálculo de reembolso en Shely Ventas:\n\n"+
+"Precio: $"+precio.toFixed(2)+"\n"+
+"Plan: "+plan+" días\n"+
+"Garantía: "+garantia+" días\n"+
+"Entrega: "+formatearFecha(entrega)+"\n"+
+"Caída: "+formatearFecha(caida)+"\n"+
+"Reembolso: $"+reembolso.toFixed(2)+"\n\n"+
+"Gracias por comprar en Shely Ventas 💖";
 
 }
+
+function enviarWhatsApp(){
+const msg=encodeURIComponent(document.getElementById("mensajeCompartir").textContent);
+window.open("https://wa.me/?text="+msg);
+}
+
+async function copiarMensaje(){
+await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
+mostrarToast("Copiado 💙");
+}
+
+window.addEventListener("load",function(){
+setTimeout(()=>{
+let splash=document.getElementById("splash-screen");
+splash.style.opacity="0";
+splash.style.transition="opacity .5s";
+setTimeout(()=>splash.style.display="none",500);
+},1200);
+});
 
 </script>
 
 </body>
-                                                 </html>
+  </html>
