@@ -6,7 +6,6 @@
 <title>Bonnie Shop - Calculadora</title>
 
 <style>
-
 *{
 box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
@@ -72,9 +71,10 @@ animation:brillar 2s infinite;
 }
 
 .titulo{
-font-size:30px;
+font-size:26px;
 font-weight:900;
 margin:0;
+white-space:nowrap;
 
 background:linear-gradient(
 180deg,
@@ -93,6 +93,51 @@ text-shadow:
 0 2px 6px rgba(255,20,147,0.5),
 0 0 12px rgba(255,255,255,0.6),
 0 0 18px rgba(255,20,147,0.4);
+}
+
+.bow{
+display:inline-block;
+position:relative;
+animation:bowFloat 2.2s ease-in-out infinite;
+}
+
+.bow.left{
+margin-right:4px;
+}
+
+.bow.right{
+margin-left:4px;
+animation-delay:.7s;
+}
+
+.bow::after{
+content:"✦";
+position:absolute;
+top:-6px;
+right:-4px;
+font-size:11px;
+color:#fff;
+text-shadow:
+0 0 6px #fff,
+0 0 10px #ffd6ec,
+0 0 14px #fff;
+animation:bowSparkle 1.6s ease-in-out infinite;
+}
+
+.bow.right::after{
+right:auto;
+left:-4px;
+animation-delay:.8s;
+}
+
+@keyframes bowFloat{
+0%,100%{transform:translateY(0) scale(1);}
+50%{transform:translateY(-1px) scale(1.04);}
+}
+
+@keyframes bowSparkle{
+0%,100%{opacity:.15;transform:scale(.7);}
+50%{opacity:1;transform:scale(1.2);}
 }
 
 .numero{
@@ -232,7 +277,6 @@ pointer-events:none;
 0%{transform:translateY(-10px);}
 100%{transform:translateY(100vh) rotate(720deg);}
 }
-
 </style>
 </head>
 
@@ -243,10 +287,10 @@ pointer-events:none;
 <div class="center">
 
 <div class="logo">
-<img src="logo-bonnie.png">
+<img src="logo-bonnie.png" alt="Bonnie Shop">
 </div>
 
-<div class="titulo">🎀 BONNIE SHOP 🎀</div>
+<div class="titulo"><span class="bow left">🎀</span>BONNIE SHOP<span class="bow right">🎀</span></div>
 
 <div class="numero">
 📱 <a href="https://wa.me/527441658520">+52 744 165 8520</a>
@@ -314,15 +358,18 @@ Primero calcula el reembolso
 </div>
 
 <script>
-
 function dias(a,b){
 const inicio=new Date(a+"T00:00:00");
 const fin=new Date(b+"T00:00:00");
 return Math.floor((fin-inicio)/(1000*60*60*24));
 }
 
-function calcular(){
+function formatearFecha(fecha){
+const f=new Date(fecha+"T00:00:00");
+return f.toLocaleDateString("es-MX");
+}
 
+function calcular(){
 const precio=parseFloat(document.getElementById("precio").value);
 const plan=parseInt(document.getElementById("plan").value);
 const garantia=parseInt(document.getElementById("garantia").value);
@@ -363,9 +410,10 @@ document.getElementById("mensaje").innerHTML=
 "Precio: $"+precio.toFixed(2)+"<br>"+
 "Plan: "+plan+" días<br>"+
 "Garantía: "+garantia+" días<br>"+
+"Entrega: "+formatearFecha(entrega)+"<br>"+
+"Caída: "+formatearFecha(caida)+"<br>"+
 "Reembolso: $"+reembolso.toFixed(2)+"<br><br>"+
 "Gracias por comprar en Bonnie Shop 💖";
-
 }
 
 function enviar(){
@@ -388,7 +436,6 @@ document.body.appendChild(c);
 setTimeout(()=>c.remove(),3000);
 }
 }
-
 </script>
 
 </body>
