@@ -1,0 +1,20 @@
+{
+  "name": "Bonnie Shop - Calculadora",
+  "short_name": "Bonnie Shop",
+  "start_url": "./bonnie.html",
+  "display": "standalone",
+  "background_color": "#f6f3fb",
+  "theme_color": "#ff4fb3",
+  "icons": [
+    {
+      "src": "icon-192-bonnie.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512-bonnie.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
