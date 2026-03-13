@@ -1,365 +1,480 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonnie Shop - Calculadora de reembolsos</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *{
+      box-sizing:border-box;
+      font-family:Arial,Helvetica,sans-serif;
+    }
 
-<title>Bonnie Shop</title>
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#ffc5e6 0%, #ff4fb3 45%, #111111 100%);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:24px;
+      overflow-x:hidden;
+      position:relative;
+    }
 
-<style>
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.95) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255,192,220,.7) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255,255,255,.75) 0 1.5px, transparent 2.5px);
+      background-size:140px 140px, 190px 190px, 240px 240px;
+      background-position:0 0, 40px 50px, 90px 20px;
+      opacity:.45;
+      animation:glitterFloat 12s linear infinite;
+    }
 
-*{
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
+    @keyframes glitterFloat{
+      0%{transform:translateY(0);}
+      50%{transform:translateY(-18px);}
+      100%{transform:translateY(0);}
+    }
 
-body{
-margin:0;
-background:linear-gradient(180deg,#ffc1e3,#ff4fb3,#111);
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-overflow-x:hidden;
-}
+    .card{
+      width:100%;
+      max-width:430px;
+      background:linear-gradient(180deg,#ffffff 0%, #fff3fa 100%);
+      border:4px solid #ff9bd8;
+      border-radius:34px;
+      padding:24px;
+      box-shadow:
+        0 0 18px rgba(255,20,147,.32),
+        0 0 35px rgba(255,255,255,.16),
+        0 20px 45px rgba(0,0,0,.20);
+      position:relative;
+      z-index:1;
+    }
 
-body::before{
-content:"";
-position:fixed;
-inset:0;
-background-image:
-radial-gradient(circle,rgba(255,255,255,.9)0 2px,transparent 3px),
-radial-gradient(circle,rgba(255,182,220,.8)0 2px,transparent 3px);
-background-size:140px 140px,180px 180px;
-opacity:.4;
-animation:brillos 10s linear infinite;
-pointer-events:none;
-}
+    .center{
+      text-align:center;
+    }
 
-@keyframes brillos{
-0%{transform:translateY(0)}
-50%{transform:translateY(-20px)}
-100%{transform:translateY(0)}
-}
+    .logo{
+      width:100%;
+      max-width:300px;
+      display:block;
+      margin:0 auto 8px auto;
+      filter:drop-shadow(0 8px 18px rgba(255,20,147,.18));
+      mix-blend-mode:multiply;
+    }
 
-.card{
-max-width:430px;
-width:100%;
-background:white;
-border-radius:30px;
-padding:25px;
-border:4px solid #ff9bd8;
-box-shadow:0 0 18px rgba(255,20,147,.35);
-}
+    .nombre{
+      margin:6px 0 0 0;
+      color:#ff1493;
+      font-size:28px;
+      font-weight:900;
+    }
 
-.logo{
-width:100%;
-max-width:300px;
-display:block;
-margin:auto;
-}
+    .phone{
+      margin-top:6px;
+      font-size:14px;
+      font-weight:800;
+    }
 
-.titulo{
-text-align:center;
-font-size:28px;
-font-weight:bold;
-color:#ff1493;
-margin-top:10px;
-}
+    .phone a{
+      color:#ff1493;
+      text-decoration:none;
+    }
 
-.numero{
-text-align:center;
-margin-top:5px;
-}
+    .subtitle{
+      margin-top:6px;
+      color:#b83280;
+      font-size:16px;
+      font-weight:800;
+    }
 
-.numero a{
-text-decoration:none;
-color:#ff1493;
-font-weight:bold;
-}
+    .badge{
+      display:inline-block;
+      margin-top:12px;
+      background:#ffdced;
+      color:#db2777;
+      font-weight:800;
+      font-size:12px;
+      padding:8px 16px;
+      border-radius:999px;
+    }
 
-.subtitulo{
-text-align:center;
-color:#b83280;
-font-weight:bold;
-margin-top:5px;
-}
+    .title2{
+      margin:18px 0 8px 0;
+      text-align:center;
+      color:#374151;
+      font-size:28px;
+      font-weight:900;
+    }
 
-.badge{
-text-align:center;
-background:#ffd6ec;
-padding:8px;
-border-radius:20px;
-margin-top:10px;
-font-weight:bold;
-color:#db2777;
-}
+    .field{
+      margin-top:14px;
+    }
 
-h2{
-text-align:center;
-color:#374151;
-margin-top:20px;
-}
+    label{
+      display:block;
+      color:#ff1493;
+      font-size:15px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
 
-label{
-font-weight:bold;
-color:#ff1493;
-display:block;
-margin-top:12px;
-}
+    input{
+      width:100%;
+      border:3px solid #ffc2e5;
+      background:#fff0f8;
+      border-radius:20px;
+      padding:15px 16px;
+      font-size:17px;
+      color:#374151;
+      outline:none;
+    }
 
-input{
-width:100%;
-padding:14px;
-border-radius:18px;
-border:3px solid #ffc2e5;
-background:#fff0f8;
-margin-top:5px;
-font-size:16px;
-}
+    input:focus{
+      border-color:#ff1493;
+      box-shadow:0 0 0 4px rgba(255,20,147,.10);
+    }
 
-button{
-width:100%;
-padding:15px;
-border:0;
-border-radius:25px;
-margin-top:15px;
-font-size:17px;
-font-weight:bold;
-cursor:pointer;
-color:white;
-}
+    .btn{
+      width:100%;
+      margin-top:16px;
+      border:0;
+      border-radius:24px;
+      padding:16px;
+      font-size:18px;
+      font-weight:900;
+      color:white;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+    }
 
-.btn1{
-background:linear-gradient(90deg,#ff6a8a,#ff1493);
-}
+    .btn::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:-120%;
+      width:55%;
+      height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+      transform:skewX(-25deg);
+      animation:shine 3s infinite;
+    }
 
-.btn2{
-background:linear-gradient(90deg,#8a6aff,#ff1493);
-}
+    @keyframes shine{
+      0%{left:-120%;}
+      45%{left:160%;}
+      100%{left:160%;}
+    }
 
-.btn3{
-background:linear-gradient(90deg,#ffb6d9,#ff69b4);
-}
+    .btn1{
+      background:linear-gradient(90deg,#ff6b8a,#ff1493,#ff4fd2);
+      box-shadow:0 0 14px rgba(255,105,180,.45);
+    }
 
-.resultado{
-margin-top:20px;
-padding:18px;
-border-radius:20px;
-background:#fff0f8;
-border:3px solid #ffc2e5;
-}
+    .btn2{
+      background:linear-gradient(90deg,#8e6cff,#ff1493);
+      box-shadow:0 0 14px rgba(168,85,247,.35);
+    }
 
-.resultado h3{
-text-align:center;
-font-size:26px;
-}
+    .btn3{
+      background:linear-gradient(90deg,#ffbfdc,#ff69b4);
+      box-shadow:0 0 14px rgba(255,182,217,.35);
+    }
 
-.resultado span{
-color:#ff1493;
-font-weight:bold;
-}
+    .install-note{
+      margin-top:12px;
+      text-align:center;
+      color:#8b8b8b;
+      font-size:12px;
+      line-height:1.4;
+    }
 
-.detalle{
-background:white;
-border-radius:15px;
-padding:12px;
-margin-top:10px;
-white-space:pre-line;
-}
+    .result{
+      margin-top:18px;
+      padding:18px;
+      border-radius:24px;
+      background:#fff0f8;
+      border:3px solid #ffc2e5;
+      text-align:center;
+    }
 
-.mensaje{
-background:white;
-border-radius:15px;
-padding:12px;
-margin-top:10px;
-white-space:pre-line;
-}
+    .result-main{
+      font-size:26px;
+      font-weight:900;
+      color:#111111;
+    }
 
-#confetti{
-position:fixed;
-inset:0;
-pointer-events:none;
-}
+    .result-main span{
+      color:#ff1493;
+      font-size:30px;
+    }
 
-.confetti{
-position:absolute;
-width:8px;
-height:12px;
-animation:caer 3s linear forwards;
-}
+    .status{
+      margin-top:10px;
+      color:#d946ef;
+      font-size:15px;
+      font-weight:800;
+    }
 
-@keyframes caer{
-0%{transform:translateY(-10px)}
-100%{transform:translateY(100vh) rotate(720deg)}
-}
+    .details{
+      margin-top:12px;
+      background:white;
+      border-radius:16px;
+      padding:14px;
+      text-align:left;
+      white-space:pre-line;
+      color:#4b5563;
+      line-height:1.65;
+    }
 
-</style>
+    .mini-msg{
+      margin-top:12px;
+      background:white;
+      border-radius:16px;
+      padding:14px;
+      text-align:left;
+      white-space:pre-line;
+      color:#4b5563;
+      line-height:1.45;
+    }
+
+    #confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:9998;
+    }
+
+    .confetti-piece{
+      position:absolute;
+      top:-20px;
+      width:10px;
+      height:16px;
+      opacity:.95;
+      animation:fall linear forwards;
+    }
+
+    @keyframes fall{
+      0%{
+        transform:translateY(-20px) rotate(0deg);
+        opacity:1;
+      }
+      100%{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:.9;
+      }
+    }
+
+    #toast{
+      position:fixed;
+      left:50%;
+      bottom:26px;
+      transform:translateX(-50%);
+      background:#ff1493;
+      color:#fff;
+      padding:12px 18px;
+      border-radius:999px;
+      font-weight:800;
+      opacity:0;
+      transition:.25s;
+      z-index:99999;
+    }
+
+    #toast.show{
+      opacity:1;
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="confetti"></div>
-
-<div class="card">
-
-<img src="logo-bonnie.png" class="logo">
-
-<div class="titulo">BONNIE SHOP</div>
-
-<div class="numero">
-📱 <a href="https://wa.me/527441658520">+52 744 165 8520</a>
-</div>
-
-<div class="subtitulo">Calculadora de reembolsos</div>
-
-<div class="badge">
-🐰 Bonita, rápida y fácil 🐰
-</div>
-
-<h2>Resultado</h2>
-
-<label>Precio del servicio</label>
-<input id="precio" type="number" placeholder="Ejemplo: 18">
-
-<label>Tiempo contratado (días)</label>
-<input id="plan" type="number" placeholder="Ejemplo: 30">
-
-<label>Días de garantía</label>
-<input id="garantia" type="number" placeholder="Ejemplo: 7">
-
-<label>📅 Fecha de entrega</label>
-<input id="entrega" type="date">
-
-<label>📅 Fecha de caída</label>
-<input id="caida" type="date">
-
-<button class="btn1" onclick="calcular()">Calcular reembolso 💞</button>
-
-<button class="btn2" onclick="enviar()">Enviar cálculo al cliente 💬</button>
-
-<button class="btn3" onclick="copiar()">Copiar resultado 📋</button>
-
-<div class="resultado">
-
-<h3>Reembolso: <span id="reembolso">$0.00</span></h3>
-
-<div id="estado"></div>
-
-<div id="detalle" class="detalle"></div>
-
-<div id="mensaje" class="mensaje"></div>
-
-</div>
-
-</div>
-
-<script>
-
-function dias(a,b){
-let inicio=new Date(a);
-let fin=new Date(b);
-return Math.floor((fin-inicio)/(1000*60*60*24));
-}
-
-function confeti(){
-
-let cont=document.getElementById("confetti");
-
-for(let i=0;i<60;i++){
-
-let c=document.createElement("div");
-
-c.className="confetti";
-
-c.style.left=Math.random()*100+"vw";
-
-c.style.background=["#ff1493","#ff69b4","#ffc0cb","#ffffff"][Math.floor(Math.random()*4)];
-
-c.style.animationDuration=(2+Math.random()*2)+"s";
-
-cont.appendChild(c);
-
-setTimeout(()=>c.remove(),4000);
-
-}
-
-}
-
-function calcular(){
-
-let precio=parseFloat(precio.value);
-let plan=parseInt(plan.value);
-let garantia=parseInt(garantia.value);
-let entrega=entrega.value;
-let caida=caida.value;
-
-let usados=dias(entrega,caida);
-
-let valorDia=precio/plan;
-
-let faltantes=0;
-let reembolso=0;
-
-if(usados<garantia){
-
-faltantes=garantia-usados;
-reembolso=valorDia*faltantes;
-estado.innerHTML="💗 Cayó dentro de garantía";
-confeti();
-
-}else{
-
-estado.innerHTML="❌ Fuera de garantía";
-
-}
-
-reembolsoHTML="$"+reembolso.toFixed(2);
-
-document.getElementById("reembolso").innerHTML=reembolsoHTML;
-
-detalle.innerHTML=
-
-"Días usados: "+usados+"<br>"+
-"Días garantía: "+garantia+"<br>"+
-"Días faltantes garantía: "+faltantes+"<br>"+
-"Valor por día: $"+valorDia.toFixed(2);
-
-mensaje.innerHTML=
-
-"Hola 🌸<br>"+
-"Este es tu cálculo de reembolso en Bonnie Shop:<br><br>"+
-
-"Precio: $"+precio.toFixed(2)+"<br>"+
-"Plan: "+plan+" días<br>"+
-"Garantía: "+garantia+" días<br>"+
-"Entrega: "+entrega+"<br>"+
-"Caída: "+caida+"<br>"+
-"Reembolso: $"+reembolso.toFixed(2)+"<br><br>"+
-
-"Gracias por comprar en Bonnie Shop 💖";
-
-}
-
-function enviar(){
-
-let texto=mensaje.innerText;
-
-window.open("https://wa.me/?text="+encodeURIComponent(texto));
-
-}
-
-function copiar(){
-
-navigator.clipboard.writeText(mensaje.innerText);
-
-alert("Resultado copiado");
-
-}
-
-</script>
-
+  <div id="confetti"></div>
+
+  <div class="card">
+    <div class="center">
+      <img src="logo-bonnie.png" class="logo" alt="Bonnie Shop">
+      <div class="nombre">BONNIE SHOP</div>
+
+      <div class="phone">
+        📱 <a href="https://wa.me/527441658520">+52 744 165 8520</a>
+      </div>
+
+      <div class="subtitle">Calculadora de reembolsos</div>
+
+      <div class="badge">🐰 Bonita, rápida y fácil 🐰</div>
+    </div>
+
+    <div class="title2">Resultado</div>
+
+    <div class="field">
+      <label>Precio del servicio</label>
+      <input id="precio" type="number" placeholder="Ejemplo: 18">
+    </div>
+
+    <div class="field">
+      <label>Tiempo contratado (días)</label>
+      <input id="plan" type="number" placeholder="Ejemplo: 30">
+    </div>
+
+    <div class="field">
+      <label>Días de garantía</label>
+      <input id="garantia" type="number" placeholder="Ejemplo: 7">
+    </div>
+
+    <div class="field">
+      <label>📅 Fecha de entrega</label>
+      <input id="entrega" type="date">
+    </div>
+
+    <div class="field">
+      <label>📅 Fecha de caída</label>
+      <input id="caida" type="date">
+    </div>
+
+    <button class="btn btn1" onclick="calcular()">Calcular reembolso 💞</button>
+    <button class="btn btn2" onclick="enviar()">Enviar cálculo al cliente 💬</button>
+    <button class="btn btn3" onclick="copiar()">Copiar resultado 📋</button>
+
+    <div class="install-note">
+      Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
+    </div>
+
+    <div class="result">
+      <div class="result-main">
+        Reembolso: <span id="reembolso">$0.00</span>
+      </div>
+
+      <div class="status" id="estadoGarantia"></div>
+
+      <div class="details" id="detalleResultado">Aquí aparecerá el detalle del cálculo.</div>
+
+      <div class="mini-msg" id="mensajeCompartir">Primero calcula el reembolso.</div>
+    </div>
+  </div>
+
+  <div id="toast">Copiado 💖</div>
+
+  <script>
+    function diferenciaDias(inicio,fin){
+      const i = new Date(inicio + "T00:00:00");
+      const f = new Date(fin + "T00:00:00");
+      return Math.floor((f - i) / (1000*60*60*24));
+    }
+
+    function formatearFecha(fecha){
+      const f = new Date(fecha + "T00:00:00");
+      return f.toLocaleDateString("es-MX");
+    }
+
+    function mostrarToast(texto){
+      const toast = document.getElementById("toast");
+      toast.textContent = texto;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1500);
+    }
+
+    function lanzarConfeti(){
+      const contenedor = document.getElementById("confetti");
+      contenedor.innerHTML = "";
+      const colores = ["#ff1493","#ff69b4","#ffc0cb","#ffe4f1","#ffffff"];
+
+      for(let i = 0; i < 90; i++){
+        const pieza = document.createElement("span");
+        pieza.className = "confetti-piece";
+        pieza.style.left = Math.random() * 100 + "vw";
+        pieza.style.background = colores[Math.floor(Math.random() * colores.length)];
+        pieza.style.width = (6 + Math.random() * 8) + "px";
+        pieza.style.height = (10 + Math.random() * 14) + "px";
+        pieza.style.borderRadius = Math.random() > 0.5 ? "999px" : "2px";
+        pieza.style.animationDuration = (2.8 + Math.random() * 2.2) + "s";
+        pieza.style.animationDelay = (Math.random() * 0.6) + "s";
+        contenedor.appendChild(pieza);
+      }
+
+      setTimeout(() => {
+        contenedor.innerHTML = "";
+      }, 5500);
+    }
+
+    function calcular(){
+      const precio = parseFloat(document.getElementById("precio").value);
+      const plan = parseInt(document.getElementById("plan").value);
+      const garantia = parseInt(document.getElementById("garantia").value);
+      const entrega = document.getElementById("entrega").value;
+      const caida = document.getElementById("caida").value;
+
+      if(!precio || !plan || !garantia || !entrega || !caida){
+        alert("Completa todos los campos 💖");
+        return;
+      }
+
+      const usados = diferenciaDias(entrega,caida);
+      const valorDia = precio / plan;
+
+      let faltantes = 0;
+      let reembolso = 0;
+
+      if(usados < garantia){
+        faltantes = garantia - usados;
+        reembolso = valorDia * faltantes;
+        document.getElementById("estadoGarantia").textContent = "💗 Cayó dentro de garantía";
+        lanzarConfeti();
+      }else{
+        document.getElementById("estadoGarantia").textContent = "❌ Fuera de garantía";
+      }
+
+      document.getElementById("reembolso").textContent = "$" + reembolso.toFixed(2);
+
+      document.getElementById("detalleResultado").textContent =
+        "Días usados: " + usados + "\n" +
+        "Días garantía: " + garantia + "\n" +
+        "Días faltantes garantía: " + faltantes + "\n" +
+        "Valor por día: $" + valorDia.toFixed(2);
+
+      document.getElementById("mensajeCompartir").textContent =
+        "Hola 🌸\n" +
+        "Este es tu cálculo de reembolso en Bonnie Shop:\n\n" +
+        "Precio: $" + precio.toFixed(2) + "\n" +
+        "Plan: " + plan + " días\n" +
+        "Garantía: " + garantia + " días\n" +
+        "Entrega: " + formatearFecha(entrega) + "\n" +
+        "Caída: " + formatearFecha(caida) + "\n" +
+        "Reembolso: $" + reembolso.toFixed(2) + "\n\n" +
+        "Gracias por comprar en Bonnie Shop 💖";
+    }
+
+    function enviar(){
+      const texto = document.getElementById("mensajeCompartir").textContent;
+
+      if(!texto || texto === "Primero calcula el reembolso."){
+        mostrarToast("Primero calcula el reembolso 💖");
+        return;
+      }
+
+      window.open("https://wa.me/?text=" + encodeURIComponent(texto), "_blank");
+    }
+
+    function copiar(){
+      const texto = document.getElementById("mensajeCompartir").textContent;
+
+      if(!texto || texto === "Primero calcula el reembolso."){
+        mostrarToast("Primero calcula el reembolso 💖");
+        return;
+      }
+
+      navigator.clipboard.writeText(texto);
+      mostrarToast("Resultado copiado 💖");
+    }
+  </script>
 </body>
 </html>
