@@ -6,7 +6,6 @@
 <title>Bonnie Shop - Calculadora</title>
 
 <style>
-
 *{
 box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
@@ -75,7 +74,6 @@ animation:brillar 2s infinite;
 font-size:30px;
 font-weight:900;
 margin:0;
-
 background:linear-gradient(
 180deg,
 #ffffff 0%,
@@ -84,11 +82,9 @@ background:linear-gradient(
 #c026d3 65%,
 #000000 90%
 );
-
 -webkit-background-clip:text;
 background-clip:text;
 color:transparent;
-
 text-shadow:
 0 2px 6px rgba(255,20,147,0.5),
 0 0 12px rgba(255,255,255,0.6),
@@ -204,6 +200,13 @@ font-weight:bold;
 color:#ff1493;
 }
 
+#estado{
+text-align:center;
+margin-top:10px;
+font-weight:bold;
+color:#d946ef;
+}
+
 .details,
 .mensaje{
 background:white;
@@ -218,13 +221,13 @@ position:fixed;
 width:8px;
 height:12px;
 animation:caer 3s linear forwards;
+pointer-events:none;
 }
 
 @keyframes caer{
 0%{transform:translateY(-10px);}
 100%{transform:translateY(100vh) rotate(720deg);}
 }
-
 </style>
 </head>
 
@@ -233,9 +236,8 @@ animation:caer 3s linear forwards;
 <div class="card">
 
 <div class="center">
-
 <div class="logo">
-<img src="logo-bonnie.png">
+<img src="logo-bonnie.png" alt="Bonnie Shop">
 </div>
 
 <div class="titulo">BONNIE SHOP</div>
@@ -251,7 +253,6 @@ Calculadora de reembolsos
 <div class="badge">
 🐰 Bonita, rápida y fácil 🐰
 </div>
-
 </div>
 
 <h2>Resultado</h2>
@@ -286,7 +287,6 @@ Calculadora de reembolsos
 <button class="btn3" onclick="copiar()">Copiar resultado 📋</button>
 
 <div class="result">
-
 <div class="result-main">
 Reembolso: <span id="reembolso">$0.00</span>
 </div>
@@ -300,88 +300,89 @@ Aquí aparecerá el cálculo
 <div id="mensaje" class="mensaje">
 Primero calcula el reembolso
 </div>
-
 </div>
 
 </div>
 
 <script>
-
 function dias(a,b){
-let inicio=new Date(a)
-let fin=new Date(b)
-return Math.floor((fin-inicio)/(1000*60*60*24))
+const inicio = new Date(a + "T00:00:00");
+const fin = new Date(b + "T00:00:00");
+return Math.floor((fin - inicio) / (1000 * 60 * 60 * 24));
+}
+
+function formatearFecha(fecha){
+const f = new Date(fecha + "T00:00:00");
+return f.toLocaleDateString("es-MX");
 }
 
 function calcular(){
+const precio = parseFloat(document.getElementById("precio").value);
+const plan = parseInt(document.getElementById("plan").value);
+const garantia = parseInt(document.getElementById("garantia").value);
+const entrega = document.getElementById("entrega").value;
+const caida = document.getElementById("caida").value;
 
-let precio=parseFloat(precio.value)
-let plan=parseInt(plan.value)
-let garantia=parseInt(garantia.value)
-let entrega=entrega.value
-let caida=caida.value
-
-let usados=dias(entrega,caida)
-let valorDia=precio/plan
-let faltantes=0
-let reembolso=0
-
-if(usados<garantia){
-faltantes=garantia-usados
-reembolso=valorDia*faltantes
-estado.innerHTML="💗 Cayó dentro de garantía"
-confeti()
-}else{
-estado.innerHTML="❌ Fuera de garantía"
+if(!precio || !plan || !garantia || !entrega || !caida){
+alert("Completa todos los campos 💖");
+return;
 }
 
-reembolsoHTML="$"+reembolso.toFixed(2)
-document.getElementById("reembolso").innerHTML=reembolsoHTML
+const usados = dias(entrega,caida);
+const valorDia = precio / plan;
 
-detalle.innerHTML=
-"Días usados: "+usados+"<br>"+
-"Días garantía: "+garantia+"<br>"+
-"Días faltantes garantía: "+faltantes+"<br>"+
-"Valor por día: $"+valorDia.toFixed(2)
+let faltantes = 0;
+let reembolso = 0;
 
-mensaje.innerHTML=
-"Hola 🌸<br>"+
-"Este es tu cálculo de reembolso en Bonnie Shop:<br><br>"+
-"Precio: $"+precio+"<br>"+
-"Plan: "+plan+" días<br>"+
-"Garantía: "+garantia+" días<br>"+
-"Reembolso: $"+reembolso.toFixed(2)+"<br><br>"+
-"Gracias por comprar en Bonnie Shop 💖"
+if(usados < garantia){
+faltantes = garantia - usados;
+reembolso = valorDia * faltantes;
+document.getElementById("estado").innerHTML = "💗 Cayó dentro de garantía";
+confeti();
+}else{
+document.getElementById("estado").innerHTML = "❌ Fuera de garantía";
+}
 
+document.getElementById("reembolso").innerHTML = "$" + reembolso.toFixed(2);
+
+document.getElementById("detalle").innerHTML =
+"Días usados: " + usados + "<br>" +
+"Días garantía: " + garantia + "<br>" +
+"Días faltantes garantía: " + faltantes + "<br>" +
+"Valor por día: $" + valorDia.toFixed(2);
+
+document.getElementById("mensaje").innerHTML =
+"Hola 🌸<br>" +
+"Este es tu cálculo de reembolso en Bonnie Shop:<br><br>" +
+"Precio: $" + precio.toFixed(2) + "<br>" +
+"Plan: " + plan + " días<br>" +
+"Garantía: " + garantia + " días<br>" +
+"Entrega: " + formatearFecha(entrega) + "<br>" +
+"Caída: " + formatearFecha(caida) + "<br>" +
+"Reembolso: $" + reembolso.toFixed(2) + "<br><br>" +
+"Gracias por comprar en Bonnie Shop 💖";
 }
 
 function enviar(){
-window.open("https://wa.me/?text="+encodeURIComponent(mensaje.innerText))
+window.open("https://wa.me/?text=" + encodeURIComponent(document.getElementById("mensaje").innerText));
 }
 
 function copiar(){
-navigator.clipboard.writeText(mensaje.innerText)
+navigator.clipboard.writeText(document.getElementById("mensaje").innerText);
+alert("Resultado copiado 💖");
 }
 
 function confeti(){
-
 for(let i=0;i<50;i++){
-
-let c=document.createElement("div")
-c.className="confetti"
-
-c.style.left=Math.random()*100+"vw"
-c.style.background=["#ff1493","#ff69b4","#ffc0cb","#fff"][Math.floor(Math.random()*4)]
-c.style.animationDuration=(2+Math.random()*2)+"s"
-
-document.body.appendChild(c)
-
-setTimeout(()=>{c.remove()},3000)
-
+const c = document.createElement("div");
+c.className = "confetti";
+c.style.left = Math.random() * 100 + "vw";
+c.style.background = ["#ff1493","#ff69b4","#ffc0cb","#fff"][Math.floor(Math.random()*4)];
+c.style.animationDuration = (2 + Math.random()*2) + "s";
+document.body.appendChild(c);
+setTimeout(() => c.remove(), 3000);
 }
-
 }
-
 </script>
 
 </body>
