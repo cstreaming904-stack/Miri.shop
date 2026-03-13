@@ -6,6 +6,7 @@
 <title>Bonnie Shop - Calculadora</title>
 
 <style>
+
 *{
 box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
@@ -70,11 +71,22 @@ animation:brillar 2s infinite;
 50%{opacity:1;transform:scale(1.2);}
 }
 
+/* CONTENEDOR DEL TITULO */
+
 .titulo{
 font-size:26px;
 font-weight:900;
 margin:0;
 white-space:nowrap;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+}
+
+/* TEXTO METALICO */
+
+.titulo-texto{
 
 background:linear-gradient(
 180deg,
@@ -95,19 +107,13 @@ text-shadow:
 0 0 18px rgba(255,20,147,0.4);
 }
 
+/* MOÑITOS */
+
 .bow{
-display:inline-block;
-position:relative;
+font-size:22px;
 animation:bowFloat 2.2s ease-in-out infinite;
-}
-
-.bow.left{
-margin-right:4px;
-}
-
-.bow.right{
-margin-left:4px;
-animation-delay:.7s;
+position:relative;
+filter:drop-shadow(0 0 4px #ff69b4);
 }
 
 .bow::after{
@@ -115,29 +121,22 @@ content:"✦";
 position:absolute;
 top:-6px;
 right:-4px;
-font-size:11px;
-color:#fff;
+font-size:10px;
+color:white;
 text-shadow:
-0 0 6px #fff,
-0 0 10px #ffd6ec,
-0 0 14px #fff;
-animation:bowSparkle 1.6s ease-in-out infinite;
-}
-
-.bow.right::after{
-right:auto;
-left:-4px;
-animation-delay:.8s;
+0 0 6px white,
+0 0 10px #ffd6ec;
+animation:sparkle 1.6s infinite;
 }
 
 @keyframes bowFloat{
-0%,100%{transform:translateY(0) scale(1);}
-50%{transform:translateY(-1px) scale(1.04);}
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-2px)}
 }
 
-@keyframes bowSparkle{
-0%,100%{opacity:.15;transform:scale(.7);}
-50%{opacity:1;transform:scale(1.2);}
+@keyframes sparkle{
+0%,100%{opacity:.2;transform:scale(.7)}
+50%{opacity:1;transform:scale(1.2)}
 }
 
 .numero{
@@ -277,6 +276,7 @@ pointer-events:none;
 0%{transform:translateY(-10px);}
 100%{transform:translateY(100vh) rotate(720deg);}
 }
+
 </style>
 </head>
 
@@ -287,10 +287,14 @@ pointer-events:none;
 <div class="center">
 
 <div class="logo">
-<img src="logo-bonnie.png" alt="Bonnie Shop">
+<img src="logo-bonnie.png">
 </div>
 
-<div class="titulo"><span class="bow left">🎀</span>BONNIE SHOP<span class="bow right">🎀</span></div>
+<div class="titulo">
+<span class="bow">🎀</span>
+<span class="titulo-texto">BONNIE SHOP</span>
+<span class="bow">🎀</span>
+</div>
 
 <div class="numero">
 📱 <a href="https://wa.me/527441658520">+52 744 165 8520</a>
@@ -305,138 +309,3 @@ Calculadora de reembolsos
 </div>
 
 </div>
-
-<h2>Resultado</h2>
-
-<div class="field">
-<label>Precio del servicio</label>
-<input id="precio" type="number" placeholder="Ejemplo: 18">
-</div>
-
-<div class="field">
-<label>Tiempo contratado (días)</label>
-<input id="plan" type="number" placeholder="Ejemplo: 30">
-</div>
-
-<div class="field">
-<label>Días de garantía</label>
-<input id="garantia" type="number" placeholder="Ejemplo: 7">
-</div>
-
-<div class="field">
-<label>📅 Fecha de entrega</label>
-<input id="entrega" type="date">
-</div>
-
-<div class="field">
-<label>📅 Fecha de caída</label>
-<input id="caida" type="date">
-</div>
-
-<button onclick="calcular()">Calcular reembolso 💞</button>
-<button class="btn2" onclick="enviar()">Enviar cálculo al cliente 💬</button>
-<button class="btn3" onclick="copiar()">Copiar resultado 📋</button>
-
-<div class="result">
-
-<div class="result-main">
-Reembolso: <span id="reembolso">$0.00</span>
-</div>
-
-<div id="estado"></div>
-
-<div id="detalle" class="details">
-Aquí aparecerá el cálculo
-</div>
-
-<div id="mensaje" class="mensaje">
-Primero calcula el reembolso
-</div>
-
-</div>
-
-</div>
-
-<script>
-function dias(a,b){
-const inicio=new Date(a+"T00:00:00");
-const fin=new Date(b+"T00:00:00");
-return Math.floor((fin-inicio)/(1000*60*60*24));
-}
-
-function formatearFecha(fecha){
-const f=new Date(fecha+"T00:00:00");
-return f.toLocaleDateString("es-MX");
-}
-
-function calcular(){
-const precio=parseFloat(document.getElementById("precio").value);
-const plan=parseInt(document.getElementById("plan").value);
-const garantia=parseInt(document.getElementById("garantia").value);
-const entrega=document.getElementById("entrega").value;
-const caida=document.getElementById("caida").value;
-
-if(!precio||!plan||!garantia||!entrega||!caida){
-alert("Completa todos los campos 💖");
-return;
-}
-
-const usados=dias(entrega,caida);
-const valorDia=precio/plan;
-
-let faltantes=0;
-let reembolso=0;
-
-if(usados<garantia){
-faltantes=garantia-usados;
-reembolso=valorDia*faltantes;
-document.getElementById("estado").innerHTML="💗 Cayó dentro de garantía";
-confeti();
-}else{
-document.getElementById("estado").innerHTML="❌ Fuera de garantía";
-}
-
-document.getElementById("reembolso").innerHTML="$"+reembolso.toFixed(2);
-
-document.getElementById("detalle").innerHTML=
-"Días usados: "+usados+"<br>"+
-"Días garantía: "+garantia+"<br>"+
-"Días faltantes garantía: "+faltantes+"<br>"+
-"Valor por día: $"+valorDia.toFixed(2);
-
-document.getElementById("mensaje").innerHTML=
-"Hola 🌸<br>"+
-"Este es tu cálculo de reembolso en Bonnie Shop:<br><br>"+
-"Precio: $"+precio.toFixed(2)+"<br>"+
-"Plan: "+plan+" días<br>"+
-"Garantía: "+garantia+" días<br>"+
-"Entrega: "+formatearFecha(entrega)+"<br>"+
-"Caída: "+formatearFecha(caida)+"<br>"+
-"Reembolso: $"+reembolso.toFixed(2)+"<br><br>"+
-"Gracias por comprar en Bonnie Shop 💖";
-}
-
-function enviar(){
-window.open("https://wa.me/?text="+encodeURIComponent(document.getElementById("mensaje").innerText));
-}
-
-function copiar(){
-navigator.clipboard.writeText(document.getElementById("mensaje").innerText);
-alert("Resultado copiado 💖");
-}
-
-function confeti(){
-for(let i=0;i<50;i++){
-const c=document.createElement("div");
-c.className="confetti";
-c.style.left=Math.random()*100+"vw";
-c.style.background=["#ff1493","#ff69b4","#ffc0cb","#fff"][Math.floor(Math.random()*4)];
-c.style.animationDuration=(2+Math.random()*2)+"s";
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),3000);
-}
-}
-</script>
-
-</body>
-</html>
