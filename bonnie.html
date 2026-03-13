@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Bonnie Shop - Calculadora</title>
 
 <style>
-
 *{
 box-sizing:border-box;
 font-family:Arial, Helvetica, sans-serif;
@@ -37,6 +35,11 @@ box-shadow:0 0 20px rgba(255,20,147,.35);
 text-align:center;
 }
 
+.logo{
+position:relative;
+margin-bottom:10px;
+}
+
 .logo img{
 width:100%;
 max-width:260px;
@@ -46,13 +49,28 @@ animation:flotar 4s ease-in-out infinite;
 filter:drop-shadow(0 0 10px #ff69b4);
 }
 
+.logo::before,
+.logo::after{
+content:"✦";
+position:absolute;
+color:white;
+font-size:20px;
+animation:brillar 2s infinite;
+}
+
+.logo::before{left:40px;top:20px;}
+.logo::after{right:40px;top:40px;}
+
 @keyframes flotar{
 0%{transform:translateY(0)}
 50%{transform:translateY(-8px)}
 100%{transform:translateY(0)}
 }
 
-/* TITULO */
+@keyframes brillar{
+0%,100%{opacity:.2;transform:scale(.7)}
+50%{opacity:1;transform:scale(1.2)}
+}
 
 .titulo{
 display:flex;
@@ -63,10 +81,8 @@ margin-top:8px;
 }
 
 .titulo-texto{
-
 font-size:26px;
 font-weight:900;
-
 background:linear-gradient(
 180deg,
 #ffffff 0%,
@@ -75,19 +91,14 @@ background:linear-gradient(
 #c026d3 65%,
 #000000 90%
 );
-
 -webkit-background-clip:text;
 background-clip:text;
 color:transparent;
-
 text-shadow:
 0 2px 6px rgba(255,20,147,.5),
 0 0 12px rgba(255,255,255,.6),
 0 0 18px rgba(255,20,147,.4);
-
 }
-
-/* MOÑITOS */
 
 .bow{
 font-size:22px;
@@ -169,8 +180,6 @@ background:#fff0f8;
 font-size:16px;
 }
 
-/* BOTONES */
-
 button{
 width:100%;
 padding:16px;
@@ -213,8 +222,6 @@ background:linear-gradient(90deg,#8a6aff,#ff1493,#000);
 background:linear-gradient(90deg,#ffb6d9,#ff69b4,#6b214f);
 }
 
-/* RESULTADO */
-
 .result{
 margin-top:20px;
 padding:18px;
@@ -249,8 +256,6 @@ margin-top:10px;
 white-space:pre-line;
 }
 
-/* CONFETI */
-
 .confetti{
 position:fixed;
 width:8px;
@@ -264,17 +269,97 @@ pointer-events:none;
 100%{transform:translateY(100vh) rotate(720deg)}
 }
 
+/* PANTALLA DE CARGA */
+#splash-screen{
+position:fixed;
+inset:0;
+background:linear-gradient(180deg,#f5f2fb 0%,#efe9f8 100%);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+overflow:hidden;
+}
+
+.splash-content{
+text-align:center;
+position:relative;
+z-index:2;
+animation:splashFade .7s ease;
+}
+
+@keyframes splashFade{
+from{opacity:0;transform:translateY(14px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.splash-logo{
+width:150px;
+height:150px;
+object-fit:contain;
+display:block;
+margin:0 auto 18px auto;
+animation:splashFloat 3s ease-in-out infinite;
+filter:drop-shadow(0 12px 26px rgba(255,20,147,.18));
+}
+
+@keyframes splashFloat{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+}
+
+.splash-loading{
+font-size:22px;
+font-weight:500;
+color:#4b5563;
+}
+
+.splash-stars span{
+position:absolute;
+color:white;
+font-size:22px;
+text-shadow:0 0 10px white,0 0 18px #fff;
+animation:splashTwinkle 2s ease-in-out infinite;
+opacity:.9;
+}
+
+.splash-stars .s1{top:18%;left:20%;animation-delay:0s;}
+.splash-stars .s2{top:26%;right:18%;animation-delay:.5s;}
+.splash-stars .s3{bottom:28%;left:14%;animation-delay:1s;}
+.splash-stars .s4{bottom:20%;right:16%;animation-delay:1.4s;}
+.splash-stars .s5{top:12%;left:52%;animation-delay:.8s;}
+
+@keyframes splashTwinkle{
+0%,100%{opacity:.2;transform:scale(.7)}
+50%{opacity:1;transform:scale(1.25)}
+}
+
 </style>
 </head>
 
 <body>
+
+<div id="splash-screen">
+  <div class="splash-stars">
+    <span class="s1">✦</span>
+    <span class="s2">✦</span>
+    <span class="s3">✦</span>
+    <span class="s4">✦</span>
+    <span class="s5">✦</span>
+  </div>
+
+  <div class="splash-content">
+    <img src="logo-bonnie.png" class="splash-logo" alt="Bonnie Shop">
+    <div class="splash-loading">Cargando...</div>
+  </div>
+</div>
 
 <div class="card">
 
 <div class="center">
 
 <div class="logo">
-<img src="logo-bonnie.png">
+<img src="logo-bonnie.png" alt="Bonnie Shop">
 </div>
 
 <div class="titulo">
@@ -351,7 +436,6 @@ Primero calcula el reembolso
 </div>
 
 <script>
-
 function dias(a,b){
 const inicio=new Date(a+"T00:00:00")
 const fin=new Date(b+"T00:00:00")
@@ -364,7 +448,6 @@ return f.toLocaleDateString("es-MX")
 }
 
 function calcular(){
-
 const precio=parseFloat(document.getElementById("precio").value)
 const plan=parseInt(document.getElementById("plan").value)
 const garantia=parseInt(document.getElementById("garantia").value)
@@ -383,31 +466,23 @@ let faltantes=0
 let reembolso=0
 
 if(usados<garantia){
-
 faltantes=garantia-usados
 reembolso=valorDia*faltantes
-
 document.getElementById("estado").innerHTML="💗 Cayó dentro de garantía"
-
 confeti()
-
 }else{
-
 document.getElementById("estado").innerHTML="❌ Fuera de garantía"
-
 }
 
 document.getElementById("reembolso").innerHTML="$"+reembolso.toFixed(2)
 
 document.getElementById("detalle").innerHTML=
-
 "Días usados: "+usados+"<br>"+
 "Días garantía: "+garantia+"<br>"+
 "Días faltantes garantía: "+faltantes+"<br>"+
 "Valor por día: $"+valorDia.toFixed(2)
 
 document.getElementById("mensaje").innerHTML=
-
 "Hola 🌸<br>"+
 "Este es tu cálculo de reembolso en Bonnie Shop:<br><br>"+
 "Precio: $"+precio.toFixed(2)+"<br>"+
@@ -417,7 +492,6 @@ document.getElementById("mensaje").innerHTML=
 "Caída: "+formatearFecha(caida)+"<br>"+
 "Reembolso: $"+reembolso.toFixed(2)+"<br><br>"+
 "Gracias por comprar en Bonnie Shop 💖"
-
 }
 
 function enviar(){
@@ -430,31 +504,27 @@ alert("Resultado copiado 💖")
 }
 
 function confeti(){
-
 for(let i=0;i<50;i++){
-
 const c=document.createElement("div")
 c.className="confetti"
-
 c.style.left=Math.random()*100+"vw"
-
-c.style.background=[
-"#ff1493",
-"#ff69b4",
-"#ffc0cb",
-"#fff"
-][Math.floor(Math.random()*4)]
-
+c.style.background=["#ff1493","#ff69b4","#ffc0cb","#fff"][Math.floor(Math.random()*4)]
 c.style.animationDuration=(2+Math.random()*2)+"s"
-
 document.body.appendChild(c)
-
 setTimeout(()=>c.remove(),3000)
-
+}
 }
 
-}
-
+window.addEventListener("load",function(){
+setTimeout(()=>{
+const splash=document.getElementById("splash-screen")
+splash.style.opacity="0"
+splash.style.transition="opacity .5s"
+setTimeout(()=>{
+splash.style.display="none"
+},500)
+},1600)
+})
 </script>
 
 </body>
