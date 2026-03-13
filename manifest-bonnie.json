@@ -1,7 +1,7 @@
 {
   "name": "Bonnie Shop - Calculadora",
   "short_name": "Bonnie Shop",
-  "start_url": "bonnie.html",
+  "start_url": "./bonnie.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ff4fb3",
