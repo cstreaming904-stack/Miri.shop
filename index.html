@@ -2,313 +2,165 @@
 <html lang="es">
 <head>
 
-<link rel="manifest" href="manifest.json">
-
-<script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Miri Shop - Calculadora de Reembolsos</title>
+<title>Miri Shop - Calculadora</title>
+
+<link rel="manifest" href="manifest-miri.json">
+<meta name="theme-color" content="#ff4fb3">
+<link rel="apple-touch-icon" href="icon-512-miri.png">
 
 <style>
 
-*{
-box-sizing:border-box;
-}
-
 body{
 margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:radial-gradient(circle at top,#ffe3f1 0%,#ffd6ec 35%,#f7ecff 70%,#fff7fb 100%);
-min-height:100vh;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(180deg,#ffc5e6 0%,#ff4fb3 50%,#111111 100%);
 display:flex;
-align-items:center;
 justify-content:center;
-padding:22px;
-color:#4b5563;
+align-items:center;
+min-height:100vh;
+padding:20px;
 }
 
 .card{
 width:100%;
-max-width:450px;
-background:rgba(255,255,255,0.96);
-border:4px solid #f7c5df;
-border-radius:34px;
-box-shadow:0 18px 45px rgba(223,105,170,0.18);
-padding:24px;
-position:relative;
-overflow:hidden;
+max-width:430px;
+background:white;
+border-radius:30px;
+padding:25px;
+border:4px solid #ff9bd8;
+box-shadow:0 0 20px rgba(255,20,147,.35);
 }
 
 .center{
 text-align:center;
 }
 
-.emoji{
-font-size:42px;
-margin-bottom:6px;
+.logo img{
+width:100%;
+max-width:250px;
+display:block;
+margin:auto;
 }
 
-h1{
-margin:0;
-color:#ec4899;
-font-size:30px;
-font-weight:900;
-letter-spacing:.5px;
+.titulo{
+font-size:26px;
+font-weight:bold;
+margin-top:10px;
 }
 
-.phone{
+.numero{
 margin-top:6px;
-font-size:14px;
-font-weight:700;
+font-weight:bold;
 }
 
-.phone a{
-color:#ec4899;
-text-decoration:none;
-}
-
-.subtitle{
+.subtitulo{
 margin-top:6px;
-color:#d946ef;
-font-weight:700;
-font-size:16px;
+font-weight:bold;
+color:#b83280;
 }
 
 .badge{
 display:inline-block;
+background:#ffd6ec;
+padding:8px 15px;
+border-radius:20px;
 margin-top:10px;
-background:#ffe2f1;
+font-weight:bold;
 color:#db2777;
-font-weight:800;
-font-size:12px;
-padding:7px 12px;
-border-radius:999px;
 }
 
-.title2{
-margin-top:18px;
-color:#374151;
-font-size:28px;
-font-weight:900;
+h2{
+text-align:center;
+margin-top:20px;
 }
 
 .field{
-margin-top:15px;
+margin-top:14px;
 }
 
 label{
+font-weight:bold;
+color:#ff1493;
 display:block;
-color:#ec4899;
-font-size:15px;
-font-weight:800;
-margin-bottom:9px;
+margin-bottom:6px;
 }
 
 input{
 width:100%;
-border:3px solid #f7c5df;
-background:#fff2f8;
+padding:15px;
 border-radius:20px;
-padding:15px 16px;
-font-size:18px;
-outline:none;
-color:#374151;
+border:3px solid #ffc2e5;
+background:#fff0f8;
+font-size:16px;
 }
 
-input:focus{
-border-color:#ec4899;
-box-shadow:0 0 0 4px rgba(236,72,153,0.10);
-}
-
-.date-box{
-position:relative;
-}
-
-.date-box input{
-padding-right:50px;
-}
-
-.icono{
-position:absolute;
-right:14px;
-top:50%;
-transform:translateY(-50%);
-font-size:18px;
-}
-
-.btn{
+button{
 width:100%;
-margin-top:18px;
-border:0;
-border-radius:22px;
 padding:16px;
-font-size:20px;
-font-weight:900;
+border:none;
+border-radius:30px;
+margin-top:15px;
+font-size:17px;
+font-weight:bold;
 color:white;
 cursor:pointer;
-box-shadow:0 12px 24px rgba(217,70,239,0.24);
-}
-
-.btn-primary{
-background:linear-gradient(90deg,#fb7185,#ec4899,#d946ef);
-}
-
-.btn-whatsapp{
-background:linear-gradient(90deg,#b388ff,#ec4899);
-margin-top:12px;
-font-size:18px;
-}
-
-.btn-copy{
-background:linear-gradient(90deg,#f9a8d4,#f472b6);
-margin-top:12px;
-font-size:18px;
-}
-
-.btn-install{
-background:linear-gradient(90deg,#f472b6,#db2777);
-margin-top:12px;
-font-size:18px;
-display:none;
+background:linear-gradient(90deg,#ff6aa9,#ff1493,#000);
 }
 
 .result{
-margin-top:22px;
+margin-top:20px;
 padding:18px;
-border-radius:24px;
-background:#fff0f7;
-border:3px solid #fbcfe8;
-text-align:center;
+border-radius:20px;
+background:#fff0f8;
+border:3px solid #ffc2e5;
 }
 
 .result-main{
-font-size:21px;
-font-weight:800;
-color:#374151;
+text-align:center;
+font-size:26px;
+font-weight:bold;
 }
 
 .result-main span{
-color:#ec4899;
-font-size:27px;
-font-weight:900;
-}
-
-.status{
-margin-top:10px;
-font-weight:800;
-color:#d946ef;
-text-align:center;
-font-size:15px;
-}
-
-.details{
-margin-top:12px;
-text-align:left;
-font-size:14px;
-line-height:1.7;
-white-space:pre-line;
-background:rgba(255,255,255,0.7);
-border-radius:16px;
-padding:13px;
-}
-
-.mini-msg{
-margin-top:12px;
-font-size:13px;
-text-align:left;
-white-space:pre-line;
-background:rgba(255,255,255,0.6);
-border-radius:16px;
-padding:12px;
-}
-
-#toast{
-position:fixed;
-left:50%;
-bottom:28px;
-transform:translateX(-50%);
-background:#ec4899;
-color:white;
-padding:12px 18px;
-border-radius:999px;
-font-weight:800;
-opacity:0;
-transition:.25s;
-z-index:99999;
-}
-
-#toast.show{
-opacity:1;
-}
-
-#splash-screen{
-position:fixed;
-inset:0;
-background:linear-gradient(180deg,#fff1f8,#ffe5f1);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
-
-.splash-content{
-text-align:center;
-}
-
-.splash-logo{
-width:120px;
-height:120px;
-border-radius:28px;
-box-shadow:0 12px 30px rgba(0,0,0,0.15);
-margin-bottom:14px;
-object-fit:cover;
-}
-
-.install-note{
-margin-top:10px;
-font-size:12px;
-color:#9ca3af;
-text-align:center;
+color:#ff1493;
 }
 
 </style>
+
 </head>
 
 <body>
-
-<div id="splash-screen">
-<div class="splash-content">
-<img src="icon-512.jpg" class="splash-logo" alt="Miri Shop">
-<h1>Miri Shop</h1>
-<p>Cargando...</p>
-</div>
-</div>
 
 <div class="card">
 
 <div class="center">
 
-<div class="emoji">💖</div>
-
-<h1>MIRI SHOP</h1>
-
-<div class="phone">
-<a href="https://wa.me/529811968561">📱 +52 981 196 8561</a>
+<div class="logo">
+<img src="miri.jpg">
 </div>
 
-<div class="subtitle">Calculadora de reembolsos</div>
+<div class="titulo">
+MIRI SHOP
+</div>
 
-<div class="badge">🌸 Bonita, rápida y fácil 🌸</div>
+<div class="numero">
+📱 +52 744 000 0000
+</div>
+
+<div class="subtitulo">
+Calculadora de reembolsos
+</div>
+
+<div class="badge">
+Bonita, rápida y fácil
+</div>
 
 </div>
 
-<div class="title2 center">Resultado</div>
+<h2>Resultado</h2>
 
 <div class="field">
 <label>Precio del servicio</label>
@@ -317,169 +169,81 @@ text-align:center;
 
 <div class="field">
 <label>Tiempo contratado (días)</label>
-<input id="tiempoContratado" type="number" placeholder="Ejemplo: 30">
+<input id="plan" type="number" placeholder="Ejemplo: 30">
 </div>
 
 <div class="field">
 <label>Días de garantía</label>
-<input id="diasGarantia" type="number" placeholder="Ejemplo: 7">
+<input id="garantia" type="number" placeholder="Ejemplo: 7">
 </div>
 
 <div class="field">
 <label>Fecha de entrega</label>
-<div class="date-box">
-<input id="fechaEntrega" type="date">
-<span class="icono">📅</span>
-</div>
+<input id="entrega" type="date">
 </div>
 
 <div class="field">
 <label>Fecha de caída</label>
-<div class="date-box">
-<input id="fechaCaida" type="date">
-<span class="icono">📅</span>
-</div>
+<input id="caida" type="date">
 </div>
 
-<button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
-
-<button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
-
-<button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
-
-<button id="installBtn" class="btn btn-install">Instalar app 🎀</button>
-
-<div class="install-note" id="installNote">
-Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
-</div>
+<button onclick="calcular()">Calcular reembolso</button>
 
 <div class="result">
 
 <div class="result-main">
-Reembolso: <span id="resultado">$0.00</span>
+Reembolso: <span id="reembolso">$0.00</span>
 </div>
 
-<div class="status" id="estadoGarantia"></div>
-
-<div class="details" id="detalleResultado">Aquí aparecerá el detalle del cálculo.</div>
-
-<div class="mini-msg" id="mensajeCompartir">Primero calcula el reembolso.</div>
+<div id="detalle"></div>
 
 </div>
 
 </div>
-
-<div id="toast">Copiado 💖</div>
 
 <script>
 
-let deferredPrompt = null;
-const installBtn = document.getElementById("installBtn");
-const installNote = document.getElementById("installNote");
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = "block";
-});
-
-installBtn.addEventListener("click", async () => {
-  if (!deferredPrompt) {
-    mostrarToast("Usa Agregar a pantalla de inicio 💖");
-    return;
-  }
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  installBtn.style.display = "none";
-});
-
-function diferenciaDias(inicio,fin){
-const i=new Date(inicio+"T00:00:00");
-const f=new Date(fin+"T00:00:00");
-return Math.floor((f-i)/(1000*60*60*24));
+function dias(a,b){
+const inicio=new Date(a)
+const fin=new Date(b)
+return Math.floor((fin-inicio)/(1000*60*60*24))
 }
 
-function formatearFecha(fecha){
-const f=new Date(fecha+"T00:00:00");
-return f.toLocaleDateString("es-MX");
-}
+function calcular(){
 
-function mostrarToast(texto){
-const toast=document.getElementById("toast");
-toast.textContent=texto;
-toast.classList.add("show");
-setTimeout(()=>toast.classList.remove("show"),1500);
-}
-
-function calcularReembolso(){
-
-const precio=parseFloat(document.getElementById("precio").value);
-const plan=parseInt(document.getElementById("tiempoContratado").value);
-const garantia=parseInt(document.getElementById("diasGarantia").value);
-const entrega=document.getElementById("fechaEntrega").value;
-const caida=document.getElementById("fechaCaida").value;
+const precio=parseFloat(document.getElementById("precio").value)
+const plan=parseInt(document.getElementById("plan").value)
+const garantia=parseInt(document.getElementById("garantia").value)
+const entrega=document.getElementById("entrega").value
+const caida=document.getElementById("caida").value
 
 if(!precio||!plan||!garantia||!entrega||!caida){
-alert("Completa todos los campos 💖");
-return;
+alert("Completa todos los campos")
+return
 }
 
-const usados=diferenciaDias(entrega,caida);
-const valorDia=precio/plan;
+const usados=dias(entrega,caida)
+const valorDia=precio/plan
 
-let faltantes=0;
-let reembolso=0;
+let faltantes=0
+let reembolso=0
 
 if(usados<garantia){
-faltantes=garantia-usados;
-reembolso=valorDia*faltantes;
-document.getElementById("estadoGarantia").textContent="💗 Cayó dentro de garantía";
-}else{
-document.getElementById("estadoGarantia").textContent="💔 Fuera de garantía";
+faltantes=garantia-usados
+reembolso=valorDia*faltantes
 }
 
-document.getElementById("resultado").textContent="$"+reembolso.toFixed(2);
+document.getElementById("reembolso").innerHTML="$"+reembolso.toFixed(2)
 
-document.getElementById("detalleResultado").textContent=
-"Días usados: "+usados+"\n"+
-"Días garantía: "+garantia+"\n"+
-"Días faltantes garantía: "+faltantes+"\n"+
-"Valor por día: $"+valorDia.toFixed(2);
-
-document.getElementById("mensajeCompartir").textContent=
-"Hola 🌸\n"+
-"Este es tu cálculo de reembolso en Miri Shop:\n\n"+
-"Precio: $"+precio.toFixed(2)+"\n"+
-"Plan: "+plan+" días\n"+
-"Garantía: "+garantia+" días\n"+
-"Entrega: "+formatearFecha(entrega)+"\n"+
-"Caída: "+formatearFecha(caida)+"\n"+
-"Reembolso: $"+reembolso.toFixed(2)+"\n\n"+
-"Gracias por comprar en Miri Shop 💖";
+document.getElementById("detalle").innerHTML=
+"Días usados: "+usados+"<br>"+
+"Días garantía: "+garantia+"<br>"+
+"Días faltantes garantía: "+faltantes+"<br>"+
+"Valor por día: $"+valorDia.toFixed(2)
 
 }
-
-function enviarWhatsApp(){
-const msg=encodeURIComponent(document.getElementById("mensajeCompartir").textContent);
-window.open("https://wa.me/?text="+msg);
-}
-
-async function copiarMensaje(){
-await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
-mostrarToast("Copiado 💖");
-}
-
-window.addEventListener("load",function(){
-setTimeout(()=>{
-let splash=document.getElementById("splash-screen");
-splash.style.opacity="0";
-splash.style.transition="opacity .5s";
-setTimeout(()=>splash.style.display="none",500);
-},1200);
-});
 
 </script>
 
 </body>
-  </html>l
+</html>
