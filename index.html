@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Miri Shop - Calculadora</title>
 
 <link rel="manifest" href="manifest-miri.json">
@@ -12,10 +10,13 @@
 <link rel="apple-touch-icon" href="icon-512-miri.png">
 
 <style>
+*{
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
 
 body{
 margin:0;
-font-family:Arial, Helvetica, sans-serif;
 background:linear-gradient(180deg,#ffc5e6 0%,#ff4fb3 50%,#111111 100%);
 display:flex;
 justify-content:center;
@@ -38,22 +39,108 @@ box-shadow:0 0 20px rgba(255,20,147,.35);
 text-align:center;
 }
 
+.logo{
+position:relative;
+margin-bottom:10px;
+}
+
 .logo img{
 width:100%;
-max-width:250px;
+max-width:260px;
 display:block;
 margin:auto;
+animation:flotar 4s ease-in-out infinite;
+filter:drop-shadow(0 0 10px #ff69b4);
+}
+
+.logo::before,
+.logo::after{
+content:"✦";
+position:absolute;
+color:white;
+font-size:20px;
+animation:brillar 2s infinite;
+}
+
+.logo::before{left:40px;top:20px;}
+.logo::after{right:40px;top:40px;}
+
+@keyframes flotar{
+0%{transform:translateY(0)}
+50%{transform:translateY(-8px)}
+100%{transform:translateY(0)}
+}
+
+@keyframes brillar{
+0%,100%{opacity:.2;transform:scale(.7)}
+50%{opacity:1;transform:scale(1.2)}
 }
 
 .titulo{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+margin-top:8px;
+}
+
+.titulo-texto{
 font-size:26px;
-font-weight:bold;
-margin-top:10px;
+font-weight:900;
+background:linear-gradient(
+180deg,
+#ffffff 0%,
+#f9a8d4 25%,
+#ff1493 45%,
+#c026d3 65%,
+#000000 90%
+);
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+text-shadow:
+0 2px 6px rgba(255,20,147,.5),
+0 0 12px rgba(255,255,255,.6),
+0 0 18px rgba(255,20,147,.4);
+}
+
+.bow{
+font-size:22px;
+position:relative;
+animation:bowFloat 2s infinite ease-in-out;
+}
+
+.bow::after{
+content:"✦";
+position:absolute;
+top:-6px;
+right:-4px;
+font-size:10px;
+color:white;
+text-shadow:
+0 0 6px white,
+0 0 10px #ffd6ec;
+animation:sparkle 1.6s infinite;
+}
+
+@keyframes sparkle{
+0%,100%{opacity:.2;transform:scale(.7)}
+50%{opacity:1;transform:scale(1.2)}
+}
+
+@keyframes bowFloat{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-2px)}
 }
 
 .numero{
 margin-top:6px;
 font-weight:bold;
+}
+
+.numero a{
+color:#ff1493;
+text-decoration:none;
 }
 
 .subtitulo{
@@ -107,7 +194,36 @@ font-size:17px;
 font-weight:bold;
 color:white;
 cursor:pointer;
+position:relative;
+overflow:hidden;
 background:linear-gradient(90deg,#ff6aa9,#ff1493,#000);
+box-shadow:0 6px 15px rgba(0,0,0,.35);
+}
+
+button::after{
+content:"";
+position:absolute;
+top:0;
+left:-120%;
+width:60%;
+height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
+transform:skewX(-25deg);
+animation:shine 3s infinite;
+}
+
+@keyframes shine{
+0%{left:-120%}
+50%{left:150%}
+100%{left:150%}
+}
+
+.btn2{
+background:linear-gradient(90deg,#8a6aff,#ff1493,#000);
+}
+
+.btn3{
+background:linear-gradient(90deg,#ffb6d9,#ff69b4,#6b214f);
 }
 
 .result{
@@ -128,26 +244,115 @@ font-weight:bold;
 color:#ff1493;
 }
 
-</style>
+#estado{
+text-align:center;
+margin-top:10px;
+font-weight:bold;
+color:#d946ef;
+}
 
+.details,
+.mensaje{
+background:white;
+border-radius:15px;
+padding:12px;
+margin-top:10px;
+white-space:pre-line;
+}
+
+.confetti{
+position:fixed;
+width:8px;
+height:12px;
+animation:caer 3s linear forwards;
+pointer-events:none;
+}
+
+@keyframes caer{
+0%{transform:translateY(-10px)}
+100%{transform:translateY(100vh) rotate(720deg)}
+}
+
+/* SPLASH */
+
+#splash-screen{
+position:fixed;
+inset:0;
+background:linear-gradient(180deg,#f6f3fb 0%,#efe8f7 100%);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+overflow:hidden;
+}
+
+.splash-content{
+text-align:center;
+}
+
+.splash-logo-wrap{
+width:170px;
+height:170px;
+margin:auto;
+border-radius:42px;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+animation:splashFloat 3s infinite;
+}
+
+.splash-logo{
+width:132px;
+height:132px;
+object-fit:cover;
+border-radius:28px;
+}
+
+@keyframes splashFloat{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-10px)}
+}
+
+.splash-loading{
+font-size:22px;
+margin-top:10px;
+}
+</style>
 </head>
 
 <body>
+
+<div id="splash-screen">
+
+<div class="splash-content">
+
+<div class="splash-logo-wrap">
+<img src="miri-splash.png" class="splash-logo">
+</div>
+
+<div class="splash-loading">Cargando...</div>
+
+</div>
+
+</div>
 
 <div class="card">
 
 <div class="center">
 
 <div class="logo">
-<img src="miri.jpg">
+<img src="logo-miri.png">
 </div>
 
 <div class="titulo">
-MIRI SHOP
+<span class="bow">🎀</span>
+<span class="titulo-texto">MIRI SHOP</span>
+<span class="bow">🎀</span>
 </div>
 
 <div class="numero">
-📱 +52 744 000 0000
+📱 <a href="https://wa.me/527440000000">+52 744 000 0000</a>
 </div>
 
 <div class="subtitulo">
@@ -155,7 +360,7 @@ Calculadora de reembolsos
 </div>
 
 <div class="badge">
-Bonita, rápida y fácil
+🐰 Bonita, rápida y fácil 🐰
 </div>
 
 </div>
@@ -178,16 +383,20 @@ Bonita, rápida y fácil
 </div>
 
 <div class="field">
-<label>Fecha de entrega</label>
+<label>📅 Fecha de entrega</label>
 <input id="entrega" type="date">
 </div>
 
 <div class="field">
-<label>Fecha de caída</label>
+<label>📅 Fecha de caída</label>
 <input id="caida" type="date">
 </div>
 
-<button onclick="calcular()">Calcular reembolso</button>
+<button onclick="calcular()">Calcular reembolso 💞</button>
+
+<button class="btn2" onclick="enviar()">Enviar cálculo al cliente 💬</button>
+
+<button class="btn3" onclick="copiar()">Copiar resultado 📋</button>
 
 <div class="result">
 
@@ -195,7 +404,15 @@ Bonita, rápida y fácil
 Reembolso: <span id="reembolso">$0.00</span>
 </div>
 
-<div id="detalle"></div>
+<div id="estado"></div>
+
+<div id="detalle" class="details">
+Aquí aparecerá el cálculo
+</div>
+
+<div id="mensaje" class="mensaje">
+Primero calcula el reembolso
+</div>
 
 </div>
 
@@ -204,9 +421,14 @@ Reembolso: <span id="reembolso">$0.00</span>
 <script>
 
 function dias(a,b){
-const inicio=new Date(a)
-const fin=new Date(b)
+const inicio=new Date(a+"T00:00:00")
+const fin=new Date(b+"T00:00:00")
 return Math.floor((fin-inicio)/(1000*60*60*24))
+}
+
+function formatearFecha(fecha){
+const f=new Date(fecha+"T00:00:00")
+return f.toLocaleDateString("es-MX")
 }
 
 function calcular(){
@@ -218,7 +440,7 @@ const entrega=document.getElementById("entrega").value
 const caida=document.getElementById("caida").value
 
 if(!precio||!plan||!garantia||!entrega||!caida){
-alert("Completa todos los campos")
+alert("Completa todos los campos 💖")
 return
 }
 
@@ -231,6 +453,10 @@ let reembolso=0
 if(usados<garantia){
 faltantes=garantia-usados
 reembolso=valorDia*faltantes
+document.getElementById("estado").innerHTML="💗 Cayó dentro de garantía"
+confeti()
+}else{
+document.getElementById("estado").innerHTML="❌ Fuera de garantía"
 }
 
 document.getElementById("reembolso").innerHTML="$"+reembolso.toFixed(2)
@@ -241,7 +467,50 @@ document.getElementById("detalle").innerHTML=
 "Días faltantes garantía: "+faltantes+"<br>"+
 "Valor por día: $"+valorDia.toFixed(2)
 
+document.getElementById("mensaje").innerHTML=
+"Hola 🌸<br>"+
+"Este es tu cálculo de reembolso en Miri Shop:<br><br>"+
+"Precio: $"+precio.toFixed(2)+"<br>"+
+"Plan: "+plan+" días<br>"+
+"Garantía: "+garantia+" días<br>"+
+"Entrega: "+formatearFecha(entrega)+"<br>"+
+"Caída: "+formatearFecha(caida)+"<br>"+
+"Reembolso: $"+reembolso.toFixed(2)+"<br><br>"+
+"Gracias por comprar en Miri Shop 💖"
+
 }
+
+function enviar(){
+window.open("https://wa.me/?text="+encodeURIComponent(document.getElementById("mensaje").innerText))
+}
+
+function copiar(){
+navigator.clipboard.writeText(document.getElementById("mensaje").innerText)
+alert("Resultado copiado 💖")
+}
+
+function confeti(){
+for(let i=0;i<50;i++){
+const c=document.createElement("div")
+c.className="confetti"
+c.style.left=Math.random()*100+"vw"
+c.style.background=["#ff1493","#ff69b4","#ffc0cb","#fff"][Math.floor(Math.random()*4)]
+c.style.animationDuration=(2+Math.random()*2)+"s"
+document.body.appendChild(c)
+setTimeout(()=>c.remove(),3000)
+}
+}
+
+window.addEventListener("load",function(){
+setTimeout(()=>{
+const splash=document.getElementById("splash-screen")
+splash.style.opacity="0"
+splash.style.transition="opacity .5s"
+setTimeout(()=>{
+splash.style.display="none"
+},500)
+},1600)
+})
 
 </script>
 
