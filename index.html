@@ -7,8 +7,11 @@
 
 <title>Miri Shop - Calculadora</title>
 
-<style>
+<link rel="manifest" href="manifest-miri.json">
+<meta name="theme-color" content="#c88cff">
+<link rel="apple-touch-icon" href="icon-512-miri.png">
 
+<style>
 *{
 box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
@@ -16,158 +19,231 @@ font-family:Arial,Helvetica,sans-serif;
 
 body{
 margin:0;
-background:radial-gradient(circle at top,#f7efff 0%,#f3e8ff 25%,#fce7f3 55%,#e0f2fe 85%,#ffffff 100%);
+background:radial-gradient(circle at top,#f7efff 0%,#f3e8ff 22%,#fce7f3 52%,#e0f2fe 78%,#ffffff 100%);
 min-height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
 padding:22px;
+color:#4b5563;
+position:relative;
 overflow-x:hidden;
 }
 
-/* TARJETA */
+/* FONDO CON ESTRELLITAS */
+.bg-sparkles{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:0;
+overflow:hidden;
+}
+
+.bg-sparkles span{
+position:absolute;
+color:rgba(255,255,255,0.9);
+text-shadow:0 0 10px rgba(255,255,255,0.9),0 0 18px rgba(221,214,254,0.8);
+animation:floatSparkle linear infinite;
+opacity:.75;
+}
+
+.bg-sparkles .s1{left:8%;top:12%;font-size:16px;animation-duration:8s;}
+.bg-sparkles .s2{left:22%;top:28%;font-size:12px;animation-duration:10s;animation-delay:1s;}
+.bg-sparkles .s3{left:40%;top:8%;font-size:18px;animation-duration:9s;animation-delay:2s;}
+.bg-sparkles .s4{left:72%;top:18%;font-size:14px;animation-duration:11s;animation-delay:.5s;}
+.bg-sparkles .s5{left:86%;top:34%;font-size:12px;animation-duration:10s;animation-delay:1.5s;}
+.bg-sparkles .s6{left:14%;top:58%;font-size:14px;animation-duration:12s;animation-delay:3s;}
+.bg-sparkles .s7{left:34%;top:72%;font-size:16px;animation-duration:9s;animation-delay:1.7s;}
+.bg-sparkles .s8{left:61%;top:66%;font-size:12px;animation-duration:10s;animation-delay:2.7s;}
+.bg-sparkles .s9{left:82%;top:78%;font-size:18px;animation-duration:11s;animation-delay:1.2s;}
+.bg-sparkles .s10{left:50%;top:46%;font-size:13px;animation-duration:8s;animation-delay:2.2s;}
+
+@keyframes floatSparkle{
+0%,100%{transform:translateY(0) scale(.8);opacity:.25;}
+50%{transform:translateY(-10px) scale(1.15);opacity:1;}
+}
 
 .card{
 width:100%;
 max-width:450px;
-background:white;
+background:rgba(255,255,255,0.96);
+border:4px solid #e9d5ff;
 border-radius:34px;
+box-shadow:0 18px 45px rgba(170,120,255,0.18);
 padding:24px;
-box-shadow:0 20px 40px rgba(168,85,247,.18);
+position:relative;
+overflow:hidden;
+z-index:1;
 }
 
-/* CORONA */
+.center{
+text-align:center;
+}
 
+/* CORONITA CON GLITTER */
 .emoji{
 font-size:42px;
-display:inline-block;
-animation:crownFloat 3s ease-in-out infinite;
+margin-bottom:6px;
+filter:drop-shadow(0 0 8px rgba(255,215,0,0.35));
 position:relative;
+display:inline-block;
+animation:crownFloat 2.8s ease-in-out infinite;
 }
 
 .emoji::before,
 .emoji::after{
 content:"✦";
 position:absolute;
-color:white;
+color:#fff7cc;
 font-size:14px;
-animation:twinkle 2s infinite;
+text-shadow:0 0 8px #fff,0 0 14px #fde68a,0 0 20px #fff;
+animation:crownTwinkle 1.7s ease-in-out infinite;
 }
 
 .emoji::before{
-left:-12px;
-top:4px;
+left:-10px;
+top:2px;
 }
 
 .emoji::after{
-right:-12px;
+right:-10px;
 top:-4px;
-animation-delay:1s;
+animation-delay:.8s;
 }
 
 @keyframes crownFloat{
-0%,100%{transform:translateY(0)}
-50%{transform:translateY(-6px)}
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-3px);}
 }
 
-@keyframes twinkle{
-0%,100%{opacity:.2;transform:scale(.7)}
-50%{opacity:1;transform:scale(1.3)}
+@keyframes crownTwinkle{
+0%,100%{opacity:.2;transform:scale(.7);}
+50%{opacity:1;transform:scale(1.25);}
 }
 
-/* LOGO */
-
+/* LOGO ARRIBA CON MOVIMIENTO Y BRILLO */
 .logo{
 position:relative;
 display:inline-block;
-margin-top:8px;
+margin-bottom:8px;
 }
 
 .logo img{
-width:220px;
-animation:floatLogo 4s ease-in-out infinite;
+width:100%;
+max-width:250px;
+display:block;
+margin:auto;
+position:relative;
+z-index:1;
+animation:logoFloat 3.5s ease-in-out infinite;
+filter:drop-shadow(0 0 12px rgba(192,38,211,.18));
 }
-
-@keyframes floatLogo{
-0%,100%{transform:translateY(0)}
-50%{transform:translateY(-10px)}
-}
-
-/* BRILLO LOGO */
 
 .logo::after{
 content:"";
 position:absolute;
-top:0;
-left:-120%;
-width:60%;
-height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);
+top:-10%;
+left:-140%;
+width:45%;
+height:120%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
 transform:skewX(-20deg);
-animation:shineLogo 4s infinite;
+animation:logoShine 4s infinite;
+z-index:2;
+pointer-events:none;
 }
 
-@keyframes shineLogo{
-0%{left:-120%}
-50%{left:160%}
-100%{left:160%}
+@keyframes logoFloat{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
 }
 
-/* TITULOS */
+@keyframes logoShine{
+0%{left:-140%;}
+35%{left:160%;}
+100%{left:160%;}
+}
 
 h1{
+margin:0;
 color:#c026d3;
-margin:6px 0;
 font-size:30px;
-text-align:center;
+font-weight:900;
+letter-spacing:.5px;
+text-shadow:0 2px 10px rgba(192,38,211,0.08);
 }
 
 .phone{
-text-align:center;
+margin-top:6px;
+font-size:14px;
 font-weight:700;
+}
+
+.phone a{
 color:#7c3aed;
+text-decoration:none;
 }
 
 .subtitle{
-text-align:center;
+margin-top:6px;
 color:#8b5cf6;
 font-weight:700;
-margin-top:4px;
+font-size:16px;
 }
 
 .badge{
-margin:auto;
+display:inline-block;
 margin-top:10px;
 background:linear-gradient(90deg,#f5d0fe,#e9d5ff,#dbeafe);
-width:max-content;
-padding:7px 14px;
-border-radius:999px;
-font-weight:700;
 color:#9333ea;
+font-weight:800;
+font-size:12px;
+padding:7px 12px;
+border-radius:999px;
+box-shadow:0 8px 16px rgba(168,85,247,0.10);
 }
 
-/* INPUTS */
+.title2{
+margin-top:18px;
+color:#374151;
+font-size:28px;
+font-weight:900;
+}
 
 .field{
-margin-top:14px;
+margin-top:15px;
 }
 
 label{
+display:block;
 color:#c026d3;
-font-weight:700;
+font-size:15px;
+font-weight:800;
+margin-bottom:9px;
 }
 
 input{
 width:100%;
-padding:14px;
-border-radius:18px;
 border:3px solid #e9d5ff;
-margin-top:6px;
-font-size:16px;
+background:linear-gradient(180deg,#fdf4ff,#f8fafc);
+border-radius:20px;
+padding:15px 16px;
+font-size:18px;
+outline:none;
+color:#374151;
+}
+
+input:focus{
+border-color:#a855f7;
+box-shadow:0 0 0 4px rgba(168,85,247,0.10);
 }
 
 .date-box{
 position:relative;
+}
+
+.date-box input{
+padding-right:52px;
 }
 
 .icono{
@@ -175,20 +251,22 @@ position:absolute;
 right:14px;
 top:50%;
 transform:translateY(-50%);
+font-size:18px;
+pointer-events:none;
 }
 
-/* BOTONES */
-
+/* BOTONES CON REFLEJO */
 .btn{
 width:100%;
-margin-top:16px;
+margin-top:18px;
+border:0;
+border-radius:22px;
 padding:16px;
-border:none;
-border-radius:24px;
-font-size:18px;
+font-size:20px;
 font-weight:900;
 color:white;
 cursor:pointer;
+box-shadow:0 12px 24px rgba(147,51,234,0.18);
 position:relative;
 overflow:hidden;
 }
@@ -200,15 +278,15 @@ top:0;
 left:-120%;
 width:50%;
 height:100%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent);
 transform:skewX(-20deg);
 animation:shine 3s infinite;
 }
 
 @keyframes shine{
-0%{left:-120%}
-50%{left:160%}
-100%{left:160%}
+0%{left:-120%;}
+50%{left:150%;}
+100%{left:150%;}
 }
 
 .btn-primary{
@@ -217,263 +295,503 @@ background:linear-gradient(90deg,#60a5fa,#a855f7,#ec4899);
 
 .btn-whatsapp{
 background:linear-gradient(90deg,#8b5cf6,#c026d3,#ec4899);
+margin-top:12px;
+font-size:18px;
 }
 
 .btn-copy{
 background:linear-gradient(90deg,#93c5fd,#c4b5fd,#f9a8d4);
+margin-top:12px;
+font-size:18px;
 }
 
-/* RESULTADO */
+.btn-install{
+background:linear-gradient(90deg,#a78bfa,#c084fc,#f472b6);
+margin-top:12px;
+font-size:18px;
+display:none;
+}
 
 .result{
-margin-top:20px;
-padding:16px;
-border-radius:22px;
-background:#faf5ff;
+margin-top:22px;
+padding:18px;
+border-radius:24px;
+background:linear-gradient(180deg,#fdf4ff,#faf5ff,#eff6ff);
 border:3px solid #e9d5ff;
+text-align:center;
+position:relative;
+transform-origin:center;
+}
+
+/* ANIMACION DEL RESULTADO */
+.result.pop{
+animation:resultPop .65s ease;
+}
+
+@keyframes resultPop{
+0%{transform:scale(.94);box-shadow:0 0 0 rgba(0,0,0,0);}
+45%{transform:scale(1.03);box-shadow:0 14px 30px rgba(168,85,247,0.14);}
+100%{transform:scale(1);}
 }
 
 .result-main{
-font-size:20px;
-font-weight:900;
-text-align:center;
+font-size:21px;
+font-weight:800;
+color:#374151;
 }
 
 .result-main span{
 color:#c026d3;
-font-size:26px;
+font-size:27px;
+font-weight:900;
 }
 
-.details,.mini-msg{
+.status{
+margin-top:10px;
+font-weight:800;
+color:#8b5cf6;
+text-align:center;
+font-size:15px;
+}
+
+.details{
 margin-top:12px;
-background:white;
-padding:12px;
-border-radius:14px;
+text-align:left;
+font-size:14px;
+line-height:1.7;
 white-space:pre-line;
+background:rgba(255,255,255,0.86);
+border-radius:16px;
+padding:13px;
 }
 
-/* CONFETI */
+.mini-msg{
+margin-top:12px;
+font-size:13px;
+text-align:left;
+line-height:1.55;
+white-space:pre-line;
+background:rgba(255,255,255,0.82);
+border-radius:16px;
+padding:12px;
+}
 
-.confetti{
+.install-note{
+margin-top:10px;
+font-size:12px;
+color:#94a3b8;
+text-align:center;
+line-height:1.4;
+}
+
+#toast{
 position:fixed;
-width:10px;
-height:10px;
-background:#f472b6;
-animation:fall 3s linear forwards;
+left:50%;
+bottom:28px;
+transform:translateX(-50%);
+background:#a855f7;
+color:white;
+padding:12px 18px;
+border-radius:999px;
+font-weight:800;
+opacity:0;
+transition:.25s;
+z-index:99999;
 }
 
-@keyframes fall{
-0%{transform:translateY(-20px)}
-100%{transform:translateY(110vh)}
+#toast.show{
+opacity:1;
 }
 
 /* SPLASH */
-
-#splash{
+#splash-screen{
 position:fixed;
 inset:0;
-background:white;
+background:linear-gradient(180deg,#f7f1ff,#f9f0ff,#fdf2f8,#eef6ff);
 display:flex;
 align-items:center;
 justify-content:center;
 z-index:9999;
-flex-direction:column;
+overflow:hidden;
+}
+
+.splash-content{
+text-align:center;
+position:relative;
+z-index:2;
+animation:splashFade .7s ease;
+}
+
+@keyframes splashFade{
+from{opacity:0;transform:translateY(12px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+.splash-logo-wrap{
+position:relative;
+width:170px;
+height:170px;
+margin:0 auto 18px auto;
+border-radius:42px;
+background:rgba(255,255,255,.72);
+backdrop-filter:blur(8px);
+-webkit-backdrop-filter:blur(8px);
+box-shadow:
+0 18px 40px rgba(0,0,0,.10),
+0 6px 20px rgba(168,85,247,.12),
+inset 0 1px 0 rgba(255,255,255,.75);
+display:flex;
+align-items:center;
+justify-content:center;
+animation:splashFloat 3s ease-in-out infinite;
 }
 
 .splash-logo{
-width:120px;
-border-radius:26px;
-animation:floatLogo 3s infinite;
+width:132px;
+height:132px;
+border-radius:28px;
+object-fit:cover;
+background:white;
+box-shadow:
+0 10px 24px rgba(168,85,247,.10),
+0 2px 8px rgba(0,0,0,.06);
 }
 
+@keyframes splashFloat{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+}
+
+.splash-title{
+margin:0;
+font-size:32px;
+font-weight:900;
+color:#a855f7;
+}
+
+.splash-text{
+margin-top:8px;
+font-size:17px;
+color:#64748b;
+}
+
+.sparkle{
+position:absolute;
+font-size:20px;
+color:white;
+text-shadow:0 0 10px white,0 0 20px #ddd6fe;
+animation:twinkle 2s infinite ease-in-out;
+opacity:.8;
+}
+
+.sparkle.s1{top:18%;left:20%;}
+.sparkle.s2{top:26%;right:20%;animation-delay:.5s;}
+.sparkle.s3{bottom:24%;left:16%;animation-delay:1s;}
+.sparkle.s4{bottom:20%;right:18%;animation-delay:1.4s;}
+
+@keyframes twinkle{
+0%,100%{opacity:.2;transform:scale(.7);}
+50%{opacity:1;transform:scale(1.25);}
+}
+
+/* CONFETI MEJORADO */
+.confetti{
+position:fixed;
+pointer-events:none;
+z-index:9998;
+animation:fallConfetti linear forwards;
+will-change:transform,opacity;
+}
+
+.confetti.square{
+width:10px;
+height:10px;
+border-radius:2px;
+}
+
+.confetti.circle{
+width:10px;
+height:10px;
+border-radius:50%;
+}
+
+.confetti.star{
+font-size:14px;
+line-height:14px;
+color:#fff;
+text-shadow:0 0 8px rgba(255,255,255,0.9),0 0 14px rgba(244,114,182,0.55);
+}
+
+@keyframes fallConfetti{
+0%{
+transform:translateY(-20px) rotate(0deg);
+opacity:1;
+}
+100%{
+transform:translateY(110vh) rotate(780deg);
+opacity:.05;
+}
+}
 </style>
 </head>
 
 <body>
 
-<div id="splash">
+<div class="bg-sparkles">
+  <span class="s1">✦</span>
+  <span class="s2">✦</span>
+  <span class="s3">✦</span>
+  <span class="s4">✦</span>
+  <span class="s5">✦</span>
+  <span class="s6">✦</span>
+  <span class="s7">✦</span>
+  <span class="s8">✦</span>
+  <span class="s9">✦</span>
+  <span class="s10">✦</span>
+</div>
 
-<img src="miri-splash.png" class="splash-logo" onerror="this.style.display='none'">
+<div id="splash-screen">
+  <div class="sparkle s1">✦</div>
+  <div class="sparkle s2">✦</div>
+  <div class="sparkle s3">✦</div>
+  <div class="sparkle s4">✦</div>
 
-<h2>Cargando...</h2>
-
+  <div class="splash-content">
+    <div class="splash-logo-wrap">
+      <img src="miri-splash.png" class="splash-logo" alt="Miri Shop">
+    </div>
+    <h1 class="splash-title">Miri Shop</h1>
+    <p class="splash-text">Cargando...</p>
+  </div>
 </div>
 
 <div class="card">
 
-<div style="text-align:center">
+  <div class="center">
 
-<div class="emoji">👑</div>
+    <div class="emoji">👑</div>
 
-<div class="logo">
-<img src="logo-miri.png" onerror="this.style.display='none'">
+    <div class="logo">
+      <img src="logo-miri.png" alt="Miri Shop">
+    </div>
+
+    <h1>MIRI SHOP</h1>
+
+    <div class="phone">
+      <a href="https://wa.me/529811968561">📱 +52 981 196 8561</a>
+    </div>
+
+    <div class="subtitle">Calculadora de reembolsos</div>
+
+    <div class="badge">🫧 Bonita, rápida y fácil 🫧</div>
+
+  </div>
+
+  <div class="title2 center">Resultado</div>
+
+  <div class="field">
+    <label>Precio del servicio</label>
+    <input id="precio" type="number" placeholder="Ejemplo: 18">
+  </div>
+
+  <div class="field">
+    <label>Tiempo contratado (días)</label>
+    <input id="tiempoContratado" type="number" placeholder="Ejemplo: 30">
+  </div>
+
+  <div class="field">
+    <label>Días de garantía</label>
+    <input id="diasGarantia" type="number" placeholder="Ejemplo: 7">
+  </div>
+
+  <div class="field">
+    <label>Fecha de entrega</label>
+    <div class="date-box">
+      <input id="fechaEntrega" type="date">
+      <span class="icono">📅</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Fecha de caída</label>
+    <div class="date-box">
+      <input id="fechaCaida" type="date">
+      <span class="icono">📅</span>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
+
+  <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
+
+  <button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
+
+  <button id="installBtn" class="btn btn-install">Instalar app 🎀</button>
+
+  <div class="install-note" id="installNote">
+    Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
+  </div>
+
+  <div class="result" id="resultBox">
+
+    <div class="result-main">
+      Reembolso: <span id="resultado">$0.00</span>
+    </div>
+
+    <div class="status" id="estadoGarantia"></div>
+
+    <div class="details" id="detalleResultado">Aquí aparecerá el detalle del cálculo.</div>
+
+    <div class="mini-msg" id="mensajeCompartir">Primero calcula el reembolso.</div>
+
+  </div>
+
 </div>
 
-<h1>MIRI SHOP</h1>
-
-<div class="phone">📱 +52 981 196 8561</div>
-
-<div class="subtitle">Calculadora de reembolsos</div>
-
-<div class="badge">🫧 Bonita, rápida y fácil 🫧</div>
-
-</div>
-
-<div class="field">
-<label>Precio del servicio</label>
-<input id="precio" type="number">
-</div>
-
-<div class="field">
-<label>Tiempo contratado (días)</label>
-<input id="tiempoContratado" type="number">
-</div>
-
-<div class="field">
-<label>Días de garantía</label>
-<input id="diasGarantia" type="number">
-</div>
-
-<div class="field">
-<label>Fecha de entrega</label>
-
-<div class="date-box">
-<input id="fechaEntrega" type="date">
-<span class="icono">📅</span>
-</div>
-
-</div>
-
-<div class="field">
-<label>Fecha de caída</label>
-
-<div class="date-box">
-<input id="fechaCaida" type="date">
-<span class="icono">📅</span>
-</div>
-
-</div>
-
-<button class="btn btn-primary" onclick="calcularReembolso()">Calcular reembolso 💞</button>
-
-<button class="btn btn-whatsapp" onclick="enviarWhatsApp()">Enviar cálculo al cliente 💬</button>
-
-<button class="btn btn-copy" onclick="copiarMensaje()">Copiar resultado 📋</button>
-
-<div class="result">
-
-<div class="result-main">
-Reembolso: <span id="resultado">$0.00</span>
-</div>
-
-<div class="details" id="detalleResultado">
-Aquí aparecerá el detalle del cálculo.
-</div>
-
-<div class="mini-msg" id="mensajeCompartir">
-Primero calcula el reembolso.
-</div>
-
-</div>
-
-</div>
+<div id="toast">Copiado 💖</div>
 
 <script>
+let deferredPrompt = null;
+const installBtn = document.getElementById("installBtn");
 
-/* SPLASH */
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
 
-window.onload=()=>{
-setTimeout(()=>{
-document.getElementById("splash").style.display="none"
-},1200)
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) {
+    mostrarToast("Usa Agregar a pantalla de inicio 💖");
+    return;
+  }
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
+function diferenciaDias(inicio,fin){
+  const i = new Date(inicio + "T00:00:00");
+  const f = new Date(fin + "T00:00:00");
+  return Math.floor((f - i) / (1000 * 60 * 60 * 24));
 }
 
-function diferenciaDias(i,f){
-return Math.floor((new Date(f)-new Date(i))/(1000*60*60*24))
+function formatearFecha(fecha){
+  const f = new Date(fecha + "T00:00:00");
+  return f.toLocaleDateString("es-MX");
 }
 
-function formatearFecha(f){
-return new Date(f).toLocaleDateString("es-MX")
+function mostrarToast(texto){
+  const toast = document.getElementById("toast");
+  toast.textContent = texto;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),1500);
+}
+
+function animarResultado(){
+  const box = document.getElementById("resultBox");
+  box.classList.remove("pop");
+  void box.offsetWidth;
+  box.classList.add("pop");
 }
 
 function calcularReembolso(){
 
-let precio=parseFloat(precio.value)
-let plan=parseInt(tiempoContratado.value)
-let garantia=parseInt(diasGarantia.value)
-let entrega=fechaEntrega.value
-let caida=fechaCaida.value
+  const precio = parseFloat(document.getElementById("precio").value);
+  const plan = parseInt(document.getElementById("tiempoContratado").value);
+  const garantia = parseInt(document.getElementById("diasGarantia").value);
+  const entrega = document.getElementById("fechaEntrega").value;
+  const caida = document.getElementById("fechaCaida").value;
 
-if(!precio||!plan||!garantia||!entrega||!caida){
-alert("Completa todos los campos 💖")
-return
-}
+  if (!precio || !plan || !garantia || !entrega || !caida){
+    alert("Completa todos los campos 💖");
+    return;
+  }
 
-let usados=diferenciaDias(entrega,caida)
-let valorDia=precio/plan
-let faltantes=0
-let reembolso=0
+  const usados = diferenciaDias(entrega,caida);
+  const valorDia = precio / plan;
 
-if(usados<garantia){
-faltantes=garantia-usados
-reembolso=valorDia*faltantes
-confeti()
-}
+  let faltantes = 0;
+  let reembolso = 0;
 
-resultado.textContent="$"+reembolso.toFixed(2)
+  if (usados < garantia){
+    faltantes = garantia - usados;
+    reembolso = valorDia * faltantes;
+    document.getElementById("estadoGarantia").textContent = "💗 Cayó dentro de garantía";
+    lanzarConfetiMejorado();
+  } else {
+    document.getElementById("estadoGarantia").textContent = "💔 Fuera de garantía";
+  }
 
-detalleResultado.textContent=
-"Días usados: "+usados+"\n"+
-"Días garantía: "+garantia+"\n"+
-"Días faltantes garantía: "+faltantes+"\n"+
-"Valor por día: $"+valorDia.toFixed(2)
+  document.getElementById("resultado").textContent = "$" + reembolso.toFixed(2);
 
-mensajeCompartir.textContent=
-"Hola 🌸\n"+
-"Este es tu cálculo de reembolso en Miri Shop:\n\n"+
-"Precio: $"+precio+"\n"+
-"Plan: "+plan+" días\n"+
-"Garantía: "+garantia+" días\n"+
-"Entrega: "+formatearFecha(entrega)+"\n"+
-"Caída: "+formatearFecha(caida)+"\n"+
-"Reembolso: $"+reembolso.toFixed(2)+"\n\n"+
-"Este reembolso puede utilizarse como saldo a favor en tu próxima renovación o compra en Miri Shop 💖\n\n"+
-"Gracias por comprar en Miri Shop 💖"
+  document.getElementById("detalleResultado").textContent =
+  "Días usados: " + usados + "\n" +
+  "Días garantía: " + garantia + "\n" +
+  "Días faltantes garantía: " + faltantes + "\n" +
+  "Valor por día: $" + valorDia.toFixed(2);
 
+  document.getElementById("mensajeCompartir").textContent =
+  "Hola 🌸\n" +
+  "Este es tu cálculo de reembolso en Miri Shop:\n\n" +
+  "Precio: $" + precio.toFixed(2) + "\n" +
+  "Plan: " + plan + " días\n" +
+  "Garantía: " + garantia + " días\n" +
+  "Entrega: " + formatearFecha(entrega) + "\n" +
+  "Caída: " + formatearFecha(caida) + "\n" +
+  "Reembolso: $" + reembolso.toFixed(2) + "\n\n" +
+  "Este reembolso puede utilizarse como saldo a favor en tu próxima renovación o compra en Miri Shop 💖\n\n" +
+  "Gracias por comprar en Miri Shop 💖";
+
+  animarResultado();
 }
 
 function enviarWhatsApp(){
-let msg=encodeURIComponent(mensajeCompartir.textContent)
-window.open("https://wa.me/?text="+msg)
+  const msg = encodeURIComponent(document.getElementById("mensajeCompartir").textContent);
+  window.open("https://wa.me/?text=" + msg);
 }
 
-function copiarMensaje(){
-navigator.clipboard.writeText(mensajeCompartir.textContent)
-alert("Copiado 💖")
+async function copiarMensaje(){
+  await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
+  mostrarToast("Copiado 💖");
 }
 
-function confeti(){
+function lanzarConfetiMejorado(){
+  const colores = ["#f472b6","#ec4899","#c084fc","#a78bfa","#93c5fd","#ffffff"];
+  const tipos = ["square","circle","star"];
 
-for(let i=0;i<60;i++){
+  for (let i=0; i<70; i++){
+    const el = document.createElement("div");
+    const tipo = tipos[Math.floor(Math.random()*tipos.length)];
+    el.className = "confetti " + tipo;
+    el.style.left = Math.random()*100 + "vw";
+    el.style.top = "-20px";
+    el.style.animationDuration = (2.2 + Math.random()*1.8) + "s";
+    el.style.animationDelay = (Math.random()*0.35) + "s";
 
-let c=document.createElement("div")
+    if (tipo === "star"){
+      el.textContent = "✦";
+      el.style.color = colores[Math.floor(Math.random()*colores.length)];
+    } else {
+      el.style.background = colores[Math.floor(Math.random()*colores.length)];
+    }
 
-c.className="confetti"
-
-c.style.left=Math.random()*100+"vw"
-
-c.style.background=["#f472b6","#ec4899","#a78bfa","#93c5fd"][Math.floor(Math.random()*4)]
-
-c.style.animationDuration=2+Math.random()*2+"s"
-
-document.body.appendChild(c)
-
-setTimeout(()=>c.remove(),4000)
-
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4200);
+  }
 }
 
-}
-
+window.addEventListener("load", function(){
+  setTimeout(()=>{
+    const splash = document.getElementById("splash-screen");
+    splash.style.opacity = "0";
+    splash.style.transition = "opacity .5s";
+    setTimeout(()=>{
+      splash.style.display = "none";
+    },500);
+  },1200);
+});
 </script>
 
 </body>
