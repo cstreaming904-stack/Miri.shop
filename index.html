@@ -121,49 +121,6 @@ animation-delay:.8s;
 50%{opacity:1;transform:scale(1.25);}
 }
 
-/* LOGO ARRIBA CON MOVIMIENTO Y BRILLO */
-.logo{
-position:relative;
-display:inline-block;
-margin-bottom:8px;
-}
-
-.logo img{
-width:100%;
-max-width:250px;
-display:block;
-margin:auto;
-position:relative;
-z-index:1;
-animation:logoFloat 3.5s ease-in-out infinite;
-filter:drop-shadow(0 0 12px rgba(192,38,211,.18));
-}
-
-.logo::after{
-content:"";
-position:absolute;
-top:-10%;
-left:-140%;
-width:45%;
-height:120%;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
-transform:skewX(-20deg);
-animation:logoShine 4s infinite;
-z-index:2;
-pointer-events:none;
-}
-
-@keyframes logoFloat{
-0%,100%{transform:translateY(0);}
-50%{transform:translateY(-8px);}
-}
-
-@keyframes logoShine{
-0%{left:-140%;}
-35%{left:160%;}
-100%{left:160%;}
-}
-
 h1{
 margin:0;
 color:#c026d3;
