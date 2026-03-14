@@ -12,7 +12,6 @@
 <link rel="apple-touch-icon" href="icon-512-miri.png">
 
 <style>
-
 *{
 box-sizing:border-box;
 }
@@ -27,6 +26,41 @@ align-items:center;
 justify-content:center;
 padding:22px;
 color:#4b5563;
+position:relative;
+overflow-x:hidden;
+}
+
+/* 2) FONDO CON ESTRELLITAS SUAVES */
+.bg-sparkles{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:0;
+overflow:hidden;
+}
+
+.bg-sparkles span{
+position:absolute;
+color:rgba(255,255,255,0.9);
+text-shadow:0 0 10px rgba(255,255,255,0.9),0 0 18px rgba(221,214,254,0.8);
+animation:floatSparkle linear infinite;
+opacity:.75;
+}
+
+.bg-sparkles .s1{left:8%;top:12%;font-size:16px;animation-duration:8s;}
+.bg-sparkles .s2{left:22%;top:28%;font-size:12px;animation-duration:10s;animation-delay:1s;}
+.bg-sparkles .s3{left:40%;top:8%;font-size:18px;animation-duration:9s;animation-delay:2s;}
+.bg-sparkles .s4{left:72%;top:18%;font-size:14px;animation-duration:11s;animation-delay:.5s;}
+.bg-sparkles .s5{left:86%;top:34%;font-size:12px;animation-duration:10s;animation-delay:1.5s;}
+.bg-sparkles .s6{left:14%;top:58%;font-size:14px;animation-duration:12s;animation-delay:3s;}
+.bg-sparkles .s7{left:34%;top:72%;font-size:16px;animation-duration:9s;animation-delay:1.7s;}
+.bg-sparkles .s8{left:61%;top:66%;font-size:12px;animation-duration:10s;animation-delay:2.7s;}
+.bg-sparkles .s9{left:82%;top:78%;font-size:18px;animation-duration:11s;animation-delay:1.2s;}
+.bg-sparkles .s10{left:50%;top:46%;font-size:13px;animation-duration:8s;animation-delay:2.2s;}
+
+@keyframes floatSparkle{
+0%,100%{transform:translateY(0) scale(.8);opacity:.25;}
+50%{transform:translateY(-10px) scale(1.15);opacity:1;}
 }
 
 .card{
@@ -39,16 +73,88 @@ box-shadow:0 18px 45px rgba(170,120,255,0.18);
 padding:24px;
 position:relative;
 overflow:hidden;
+z-index:1;
 }
 
 .center{
 text-align:center;
 }
 
+/* 3) BRILLO PASANDO POR EL LOGO */
+.logo{
+position:relative;
+display:inline-block;
+margin-bottom:6px;
+}
+
+.logo img{
+width:100%;
+max-width:250px;
+display:block;
+margin:auto;
+position:relative;
+z-index:1;
+}
+
+.logo::after{
+content:"";
+position:absolute;
+top:-10%;
+left:-140%;
+width:45%;
+height:120%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);
+transform:skewX(-20deg);
+animation:logoShine 4s infinite;
+z-index:2;
+pointer-events:none;
+}
+
+@keyframes logoShine{
+0%{left:-140%;}
+35%{left:160%;}
+100%{left:160%;}
+}
+
+/* 1) CORONITA CON GLITTER */
 .emoji{
 font-size:42px;
 margin-bottom:6px;
 filter:drop-shadow(0 0 8px rgba(255,215,0,0.35));
+position:relative;
+display:inline-block;
+animation:crownFloat 2.8s ease-in-out infinite;
+}
+
+.emoji::before,
+.emoji::after{
+content:"✦";
+position:absolute;
+color:#fff7cc;
+font-size:14px;
+text-shadow:0 0 8px #fff,0 0 14px #fde68a,0 0 20px #fff;
+animation:crownTwinkle 1.7s ease-in-out infinite;
+}
+
+.emoji::before{
+left:-10px;
+top:2px;
+}
+
+.emoji::after{
+right:-10px;
+top:-4px;
+animation-delay:.8s;
+}
+
+@keyframes crownFloat{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-3px);}
+}
+
+@keyframes crownTwinkle{
+0%,100%{opacity:.2;transform:scale(.7);}
+50%{opacity:1;transform:scale(1.25);}
 }
 
 h1{
@@ -205,6 +311,19 @@ border-radius:24px;
 background:linear-gradient(180deg,#fdf4ff,#faf5ff,#eff6ff);
 border:3px solid #e9d5ff;
 text-align:center;
+position:relative;
+transform-origin:center;
+}
+
+/* 4) ANIMACION DEL RESULTADO */
+.result.pop{
+animation:resultPop .65s ease;
+}
+
+@keyframes resultPop{
+0%{transform:scale(.94);box-shadow:0 0 0 rgba(0,0,0,0);}
+45%{transform:scale(1.03);box-shadow:0 14px 30px rgba(168,85,247,0.14);}
+100%{transform:scale(1);}
 }
 
 .result-main{
@@ -340,10 +459,62 @@ opacity:.8;
 50%{opacity:1;transform:scale(1.25);}
 }
 
+/* 5) CONFETI MEJORADO */
+.confetti{
+position:fixed;
+pointer-events:none;
+z-index:9998;
+animation:fallConfetti linear forwards;
+will-change:transform,opacity;
+}
+
+.confetti.square{
+width:10px;
+height:10px;
+border-radius:2px;
+}
+
+.confetti.circle{
+width:10px;
+height:10px;
+border-radius:50%;
+}
+
+.confetti.star{
+font-size:14px;
+line-height:14px;
+color:#fff;
+text-shadow:0 0 8px rgba(255,255,255,0.9),0 0 14px rgba(244,114,182,0.55);
+}
+
+@keyframes fallConfetti{
+0%{
+transform:translateY(-20px) rotate(0deg);
+opacity:1;
+}
+100%{
+transform:translateY(110vh) rotate(780deg);
+opacity:.05;
+}
+}
+
 </style>
 </head>
 
 <body>
+
+<div class="bg-sparkles">
+  <span class="s1">✦</span>
+  <span class="s2">✦</span>
+  <span class="s3">✦</span>
+  <span class="s4">✦</span>
+  <span class="s5">✦</span>
+  <span class="s6">✦</span>
+  <span class="s7">✦</span>
+  <span class="s8">✦</span>
+  <span class="s9">✦</span>
+  <span class="s10">✦</span>
+</div>
 
 <div id="splash-screen">
 <div class="sparkle s1">✦</div>
@@ -421,7 +592,7 @@ opacity:.8;
 Si no aparece el botón, abre el menú del navegador y toca “Agregar a pantalla de inicio”.
 </div>
 
-<div class="result">
+<div class="result" id="resultBox">
 
 <div class="result-main">
 Reembolso: <span id="resultado">$0.00</span>
@@ -479,6 +650,13 @@ toast.classList.add("show");
 setTimeout(()=>toast.classList.remove("show"),1500);
 }
 
+function animarResultado(){
+const box=document.getElementById("resultBox");
+box.classList.remove("pop");
+void box.offsetWidth;
+box.classList.add("pop");
+}
+
 function calcularReembolso(){
 
 const precio=parseFloat(document.getElementById("precio").value);
@@ -502,6 +680,7 @@ if(usados<garantia){
 faltantes=garantia-usados;
 reembolso=valorDia*faltantes;
 document.getElementById("estadoGarantia").textContent="💗 Cayó dentro de garantía";
+lanzarConfetiMejorado();
 }else{
 document.getElementById("estadoGarantia").textContent="💔 Fuera de garantía";
 }
@@ -525,6 +704,7 @@ document.getElementById("mensajeCompartir").textContent=
 "Reembolso: $"+reembolso.toFixed(2)+"\n\n"+
 "Gracias por comprar en Miri Shop 💖";
 
+animarResultado();
 }
 
 function enviarWhatsApp(){
@@ -535,6 +715,31 @@ window.open("https://wa.me/?text="+msg);
 async function copiarMensaje(){
 await navigator.clipboard.writeText(document.getElementById("mensajeCompartir").textContent);
 mostrarToast("Copiado 💖");
+}
+
+function lanzarConfetiMejorado(){
+const colores=["#f472b6","#ec4899","#c084fc","#a78bfa","#93c5fd","#ffffff"];
+const tipos=["square","circle","star"];
+
+for(let i=0;i<70;i++){
+const el=document.createElement("div");
+const tipo=tipos[Math.floor(Math.random()*tipos.length)];
+el.className="confetti "+tipo;
+el.style.left=Math.random()*100+"vw";
+el.style.top="-20px";
+el.style.animationDuration=(2.2+Math.random()*1.8)+"s";
+el.style.animationDelay=(Math.random()*0.35)+"s";
+
+if(tipo==="star"){
+el.textContent="✦";
+el.style.color=colores[Math.floor(Math.random()*colores.length)];
+}else{
+el.style.background=colores[Math.floor(Math.random()*colores.length)];
+}
+
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),4200);
+}
 }
 
 window.addEventListener("load",function(){
