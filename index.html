@@ -8,7 +8,7 @@
 <title>Miri Shop - Calculadora</title>
 
 <link rel="manifest" href="manifest-miri.json">
-<meta name="theme-color" content="#ff4fb3">
+<meta name="theme-color" content="#c88cff">
 <link rel="apple-touch-icon" href="icon-512-miri.png">
 
 <style>
@@ -20,7 +20,7 @@ box-sizing:border-box;
 body{
 margin:0;
 font-family:Arial,Helvetica,sans-serif;
-background:radial-gradient(circle at top,#ffe3f1 0%,#ffd6ec 35%,#f7ecff 70%,#fff7fb 100%);
+background:radial-gradient(circle at top,#f7efff 0%,#f3e8ff 22%,#fce7f3 52%,#e0f2fe 78%,#ffffff 100%);
 min-height:100vh;
 display:flex;
 align-items:center;
@@ -33,9 +33,9 @@ color:#4b5563;
 width:100%;
 max-width:450px;
 background:rgba(255,255,255,0.96);
-border:4px solid #f7c5df;
+border:4px solid #e9d5ff;
 border-radius:34px;
-box-shadow:0 18px 45px rgba(223,105,170,0.18);
+box-shadow:0 18px 45px rgba(170,120,255,0.18);
 padding:24px;
 position:relative;
 overflow:hidden;
@@ -48,14 +48,16 @@ text-align:center;
 .emoji{
 font-size:42px;
 margin-bottom:6px;
+filter:drop-shadow(0 0 8px rgba(255,215,0,0.35));
 }
 
 h1{
 margin:0;
-color:#ec4899;
+color:#c026d3;
 font-size:30px;
 font-weight:900;
 letter-spacing:.5px;
+text-shadow:0 2px 10px rgba(192,38,211,0.08);
 }
 
 .phone{
@@ -65,13 +67,13 @@ font-weight:700;
 }
 
 .phone a{
-color:#ec4899;
+color:#7c3aed;
 text-decoration:none;
 }
 
 .subtitle{
 margin-top:6px;
-color:#d946ef;
+color:#8b5cf6;
 font-weight:700;
 font-size:16px;
 }
@@ -79,12 +81,13 @@ font-size:16px;
 .badge{
 display:inline-block;
 margin-top:10px;
-background:#ffe2f1;
-color:#db2777;
+background:linear-gradient(90deg,#f5d0fe,#e9d5ff,#dbeafe);
+color:#9333ea;
 font-weight:800;
 font-size:12px;
 padding:7px 12px;
 border-radius:999px;
+box-shadow:0 8px 16px rgba(168,85,247,0.10);
 }
 
 .title2{
@@ -100,7 +103,7 @@ margin-top:15px;
 
 label{
 display:block;
-color:#ec4899;
+color:#c026d3;
 font-size:15px;
 font-weight:800;
 margin-bottom:9px;
@@ -108,8 +111,8 @@ margin-bottom:9px;
 
 input{
 width:100%;
-border:3px solid #f7c5df;
-background:#fff2f8;
+border:3px solid #e9d5ff;
+background:linear-gradient(180deg,#fdf4ff,#f8fafc);
 border-radius:20px;
 padding:15px 16px;
 font-size:18px;
@@ -118,8 +121,8 @@ color:#374151;
 }
 
 input:focus{
-border-color:#ec4899;
-box-shadow:0 0 0 4px rgba(236,72,153,0.10);
+border-color:#a855f7;
+box-shadow:0 0 0 4px rgba(168,85,247,0.10);
 }
 
 .date-box{
@@ -149,27 +152,47 @@ font-size:20px;
 font-weight:900;
 color:white;
 cursor:pointer;
-box-shadow:0 12px 24px rgba(217,70,239,0.24);
+box-shadow:0 12px 24px rgba(147,51,234,0.18);
+position:relative;
+overflow:hidden;
+}
+
+.btn::after{
+content:"";
+position:absolute;
+top:0;
+left:-120%;
+width:50%;
+height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent);
+transform:skewX(-20deg);
+animation:shine 3s infinite;
+}
+
+@keyframes shine{
+0%{left:-120%;}
+50%{left:150%;}
+100%{left:150%;}
 }
 
 .btn-primary{
-background:linear-gradient(90deg,#fb7185,#ec4899,#d946ef);
+background:linear-gradient(90deg,#60a5fa,#a855f7,#ec4899);
 }
 
 .btn-whatsapp{
-background:linear-gradient(90deg,#b388ff,#ec4899);
+background:linear-gradient(90deg,#8b5cf6,#c026d3,#ec4899);
 margin-top:12px;
 font-size:18px;
 }
 
 .btn-copy{
-background:linear-gradient(90deg,#f9a8d4,#f472b6);
+background:linear-gradient(90deg,#93c5fd,#c4b5fd,#f9a8d4);
 margin-top:12px;
 font-size:18px;
 }
 
 .btn-install{
-background:linear-gradient(90deg,#f472b6,#db2777);
+background:linear-gradient(90deg,#a78bfa,#c084fc,#f472b6);
 margin-top:12px;
 font-size:18px;
 display:none;
@@ -179,8 +202,8 @@ display:none;
 margin-top:22px;
 padding:18px;
 border-radius:24px;
-background:#fff0f7;
-border:3px solid #fbcfe8;
+background:linear-gradient(180deg,#fdf4ff,#faf5ff,#eff6ff);
+border:3px solid #e9d5ff;
 text-align:center;
 }
 
@@ -191,7 +214,7 @@ color:#374151;
 }
 
 .result-main span{
-color:#ec4899;
+color:#c026d3;
 font-size:27px;
 font-weight:900;
 }
@@ -199,7 +222,7 @@ font-weight:900;
 .status{
 margin-top:10px;
 font-weight:800;
-color:#d946ef;
+color:#8b5cf6;
 text-align:center;
 font-size:15px;
 }
@@ -210,7 +233,7 @@ text-align:left;
 font-size:14px;
 line-height:1.7;
 white-space:pre-line;
-background:rgba(255,255,255,0.7);
+background:rgba(255,255,255,0.86);
 border-radius:16px;
 padding:13px;
 }
@@ -220,7 +243,7 @@ margin-top:12px;
 font-size:13px;
 text-align:left;
 white-space:pre-line;
-background:rgba(255,255,255,0.6);
+background:rgba(255,255,255,0.82);
 border-radius:16px;
 padding:12px;
 }
@@ -228,7 +251,7 @@ padding:12px;
 .install-note{
 margin-top:10px;
 font-size:12px;
-color:#9ca3af;
+color:#94a3b8;
 text-align:center;
 line-height:1.4;
 }
@@ -238,7 +261,7 @@ position:fixed;
 left:50%;
 bottom:28px;
 transform:translateX(-50%);
-background:#ec4899;
+background:#a855f7;
 color:white;
 padding:12px 18px;
 border-radius:999px;
@@ -255,24 +278,66 @@ opacity:1;
 #splash-screen{
 position:fixed;
 inset:0;
-background:linear-gradient(180deg,#fff1f8,#ffe5f1);
+background:linear-gradient(180deg,#f7f1ff,#f9f0ff,#fdf2f8,#eef6ff);
 display:flex;
 align-items:center;
 justify-content:center;
 z-index:9999;
+overflow:hidden;
 }
 
 .splash-content{
 text-align:center;
+position:relative;
+z-index:2;
 }
 
 .splash-logo{
 width:120px;
 height:120px;
 border-radius:28px;
-box-shadow:0 12px 30px rgba(0,0,0,0.15);
+box-shadow:0 12px 30px rgba(168,85,247,0.15);
 margin-bottom:14px;
 object-fit:cover;
+animation:splashFloat 3s ease-in-out infinite;
+background:white;
+}
+
+@keyframes splashFloat{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
+}
+
+.splash-title{
+margin:0;
+font-size:32px;
+font-weight:900;
+color:#a855f7;
+}
+
+.splash-text{
+margin-top:8px;
+font-size:17px;
+color:#64748b;
+}
+
+.sparkle{
+position:absolute;
+font-size:20px;
+color:white;
+text-shadow:0 0 10px white,0 0 20px #ddd6fe;
+animation:twinkle 2s infinite ease-in-out;
+opacity:.8;
+}
+
+.sparkle.s1{top:18%;left:20%;}
+.sparkle.s2{top:26%;right:20%;animation-delay:.5s;}
+.sparkle.s3{bottom:24%;left:16%;animation-delay:1s;}
+.sparkle.s4{bottom:20%;right:18%;animation-delay:1.4s;}
+
+@keyframes twinkle{
+0%,100%{opacity:.2;transform:scale(.7);}
+50%{opacity:1;transform:scale(1.25);}
 }
 
 </style>
@@ -281,10 +346,15 @@ object-fit:cover;
 <body>
 
 <div id="splash-screen">
+<div class="sparkle s1">✦</div>
+<div class="sparkle s2">✦</div>
+<div class="sparkle s3">✦</div>
+<div class="sparkle s4">✦</div>
+
 <div class="splash-content">
 <img src="miri-splash.png" class="splash-logo" alt="Miri Shop">
-<h1>Miri Shop</h1>
-<p>Cargando...</p>
+<h1 class="splash-title">Miri Shop</h1>
+<p class="splash-text">Cargando...</p>
 </div>
 </div>
 
@@ -292,7 +362,7 @@ object-fit:cover;
 
 <div class="center">
 
-<div class="emoji">💖</div>
+<div class="emoji">👑</div>
 
 <h1>MIRI SHOP</h1>
 
@@ -302,7 +372,7 @@ object-fit:cover;
 
 <div class="subtitle">Calculadora de reembolsos</div>
 
-<div class="badge">🌸 Bonita, rápida y fácil 🌸</div>
+<div class="badge">🫧 Bonita, rápida y fácil 🫧</div>
 
 </div>
 
